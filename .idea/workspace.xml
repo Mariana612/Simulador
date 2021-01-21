@@ -2,12 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3aa96b3d-76bc-4681-ad45-6a347cccd36b" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/desing.mode/DesignMode.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/desing.mode/Imgs/bg.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/desing.mode/Imgs/logo.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/desing.mode/Start.py" beforeDir="false" afterPath="$PROJECT_DIR$/desing.mode/Start.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/desing.mode/trash_i_dont_need.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/desing.mode/DesignMode.py" beforeDir="false" afterPath="$PROJECT_DIR$/desing.mode/DesignMode.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/desing.mode/SimulateMode.py" beforeDir="false" afterPath="$PROJECT_DIR$/desing.mode/SimulateMode.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
