@@ -1,3 +1,5 @@
+
+--------------------------------------------------------------------------------------------------------------
 if self.name_int:
     if event.key == pygame.K_BACKSPACE:
         if self.pow:
@@ -52,6 +54,8 @@ else:
     self.screen.blit(text, (245, 255))
     self.screen.blit(text2, (245, 320))
 
+-------------------------------------------------------------------------------------------------------------
+
     def uselessRect(self):
         # middle
         pygame.draw.rect(self.screen, (174, 169, 169), (50, 250, 100, 110))
@@ -72,3 +76,11 @@ else:
         pygame.draw.rect(self.screen, (174, 169, 169), (623, 420, 100, 110))
 
         pygame.display.flip()
+
+-------------------------------------------------------------------------------------------------------------
+
+'''
+stuff i don't need rn
+rectangle = pygame.draw.rect(self.screen, (255, 0, 0), (845, 330, 61, 26))
+p!catch
+'''

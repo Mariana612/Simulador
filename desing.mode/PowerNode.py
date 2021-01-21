@@ -6,6 +6,7 @@ class PowerNode(object):
         self.rect = pygame.Rect((x, y, width, height))
         self.name = ""
         self.value = ""
+        self.rotated = False
 
     def checkPlacement(self):
         # places y

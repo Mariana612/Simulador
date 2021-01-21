@@ -5,7 +5,8 @@ class ResNode(object):
     def __init__(self, x, y, width, height):
         self.rect = pygame.Rect((x, y, width, height))
         self.name = ""
-        self.value =""
+        self.value = ""
+        self.rotated = False
 
     def checkPlacementRes(self):
         # places y
