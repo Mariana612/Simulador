@@ -251,7 +251,7 @@ class DesignMode:
                 if change_button.collidepoint((mx, my)) and click:  # changes mode
                     print("aqui se cambia de modo")
                     click = False
-                    SimulateMode(self.screen, self.clock)
+                    SimulateMode(self.screen, self.clock, self.list_pow,self.list_res)
                     on = False
 
             else:
