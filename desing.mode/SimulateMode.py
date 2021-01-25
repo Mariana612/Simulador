@@ -10,6 +10,9 @@ class SimulateMode:
         self.font = pygame.font.SysFont('timesnewroman', 20)
         self.clock = clock
 
+        self.list_pow = []
+        self.list_res = []
+
         self.initialCall()
 
     def initialCall(self):

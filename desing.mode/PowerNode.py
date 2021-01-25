@@ -7,27 +7,26 @@ class PowerNode(object):
         self.name = ""
         self.value = ""
         self.rotated = False
+        self.sum = 0
 
+    # def recurisve(self,num):
     def checkPlacement(self):
         # places y
-        if self.rect.y <= 180:
-            self.setxy(self.rect.x, 80)
-        elif self.rect.y <= 320:
-            self.setxy(self.rect.x, 250)
+        num = 96
+        num_x = 96
+        if not self.rotated:
+            num -= 55
+            num_x -= 50
         else:
-            self.setxy(self.rect.x, 420)
+            num -= 50
+            num_x -= 55
 
-        # places x
-        if self.rect.x <= 310:
-            if self.rect.y == 250 and self.rect.x <= 140:
-                self.setxy(50, 250)
-            else:
-                self.setxy(241, self.rect.y)
-        else:
-            if self.rect.y == 250 and self.rect.x >= 530:
-                self.setxy(623, 250)
-            else:
-                self.setxy(432, self.rect.y)
+        while not (num - (self.rect.y-50) >= 0):
+            num += 96
+        self.setxy(self.rect.x, num)
+        while not (num_x - (self.rect.x-50) >= 0):
+            num_x += 96
+        self.setxy(num_x, self.rect.y)
 
     def setxy(self, mx, my):
         self.rect.x = mx

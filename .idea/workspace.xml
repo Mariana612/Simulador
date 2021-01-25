@@ -19,7 +19,19 @@
     <select />
   </component>
   <component name="ChangeListManager">
+<<<<<<< Updated upstream
     <list default="true" id="3aa96b3d-76bc-4681-ad45-6a347cccd36b" name="Default Changelist" comment="Correción Grafo" />
+=======
+    <list default="true" id="3aa96b3d-76bc-4681-ad45-6a347cccd36b" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/desing.mode/DesignMode.py" beforeDir="false" afterPath="$PROJECT_DIR$/desing.mode/DesignMode.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/desing.mode/Imgs/resistencia.png" beforeDir="false" afterPath="$PROJECT_DIR$/desing.mode/Imgs/resistencia.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/desing.mode/Imgs/white.png" beforeDir="false" afterPath="$PROJECT_DIR$/desing.mode/Imgs/white.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/desing.mode/PowerNode.py" beforeDir="false" afterPath="$PROJECT_DIR$/desing.mode/PowerNode.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/desing.mode/ResNode.py" beforeDir="false" afterPath="$PROJECT_DIR$/desing.mode/ResNode.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/desing.mode/SimulateMode.py" beforeDir="false" afterPath="$PROJECT_DIR$/desing.mode/SimulateMode.py" afterDir="false" />
+    </list>
+>>>>>>> Stashed changes
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />

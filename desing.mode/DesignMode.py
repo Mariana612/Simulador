@@ -71,7 +71,7 @@ class DesignMode:
         choose = self.font.render('Choose', True, (243, 243, 243))
 
         self.writing = True  # Activa modo para escribir
-        self.screen.blit(white_img, (100, 194))
+        self.screen.blit(white_img, (0, 0))
         if element:
             self.pow = True
             self.screen.blit(blue_ohms, (100, 194))
@@ -144,6 +144,7 @@ class DesignMode:
             for event in pygame.event.get():
                 if event.type == MOUSEBUTTONDOWN and event.button == 1:  # check for left mouse click
                     click = True
+                    print(mx,my)
                 if event.type == MOUSEBUTTONUP:
                     click = False
 
@@ -196,19 +197,20 @@ class DesignMode:
                         self.value = ""
                         self.writing = False
 
+                    if blue_rect_l.collidepoint((mx, my)) and click:
+                        if self.pow:
+                            self.list_pow[-1].rotated = False
+                        else:
+                            self.list_res[-1].rotated = False
+
+                    if blue_rect_r.collidepoint((mx, my)) and click:
+                        if self.pow:
+                            self.list_pow[-1].rotated = True
+                        else:
+                            self.list_res[-1].rotated = True
+
                     pygame.display.flip()
 
-                if blue_rect_l.collidepoint((mx, my)) and click:
-                    if self.pow:
-                        self.list_pow[-1].rotated = False
-                    else:
-                        self.list_res[-1].rotated = False
-
-                if blue_rect_r.collidepoint((mx, my)) and click:
-                    if self.pow:
-                        self.list_pow[-1].rotated = True
-                    else:
-                        self.list_res[-1].rotated = True
 
                 # Closes Simulator
                 if event.type == QUIT or (event.type == KEYDOWN and event.key == K_ESCAPE):  # leave application
@@ -241,7 +243,10 @@ class DesignMode:
 
                 for o in self.list_res:  # Checks for collitions
                     if o.rect.collidepoint((mx, my)) and click:
-                        o.setxyRes(mx - 30, my - 10)
+                        if not o.rotated:
+                            o.setxyRes(mx - 30, my - 10)
+                        else:
+                            o.setxyRes(mx - 13, my - 36)
 
                 if change_button.collidepoint((mx, my)) and click:  # changes mode
                     print("aqui se cambia de modo")
