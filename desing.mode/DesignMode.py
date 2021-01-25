@@ -3,6 +3,7 @@ import sys
 from pygame.locals import *
 from PowerNode import PowerNode
 from ResNode import ResNode
+from SimulateMode import SimulateMode
 
 
 class DesignMode:
@@ -40,6 +41,9 @@ class DesignMode:
         self.screen.blit(rectangle_img, [772, 62])  # fix transparency
         self.screen.blit(power_img_on if touched1 else power_img, [825, 200])
         self.screen.blit(res_img_on if touched2 else res_img, [845, 330])
+        rectangle = pygame.draw.rect(self.screen, (81, 125, 164), (825, 420, 100, 34))
+        text = self.font.render("simulate", True, (225, 225, 225))
+        self.screen.blit(text, [840, 425])
         pygame.display.flip()
         self.clock.tick(14)
 
@@ -135,6 +139,7 @@ class DesignMode:
             finish_rect = pygame.Rect((213, 365, 100, 25))
             blue_rect_l = pygame.Rect((470, 355, 70, 25))
             blue_rect_r = pygame.Rect((590, 355, 70, 25))
+            change_button = pygame.Rect((825, 420, 100, 34))
 
             for event in pygame.event.get():
                 if event.type == MOUSEBUTTONDOWN and event.button == 1:  # check for left mouse click
@@ -215,27 +220,37 @@ class DesignMode:
             power_button = pygame.Rect(825, 200, 100, 110)
             res_button = pygame.Rect(845, 330, 61, 26)
 
-            if res_button.collidepoint((mx, my)):  # Crea Resistencias
-                self.paintButtons(False, True)
-                if click:
-                    self.createElement(61, 26, False)
-                    click = False
+            if not self.writing:
+                if res_button.collidepoint((mx, my)):  # Crea Resistencias
+                    self.paintButtons(False, True)
+                    if click:
+                        self.createElement(61, 26, False)
+                        click = False
 
-            elif power_button.collidepoint((mx, my)):  # Crea Fuente de Poder
-                self.paintButtons(True, False)
-                if click:
-                    self.createElement(100, 110, True)
+                elif power_button.collidepoint((mx, my)):  # Crea Fuente de Poder
+                    self.paintButtons(True, False)
+                    if click:
+                        self.createElement(100, 110, True)
+                        click = False
+                else:
+                    self.paintButtons(False, False)
+
+                for o in self.list_pow:  # Checks for collitions
+                    if o.rect.collidepoint((mx, my)) and click:
+                        o.setxy(mx - 50, my - 50)
+
+                for o in self.list_res:  # Checks for collitions
+                    if o.rect.collidepoint((mx, my)) and click:
+                        o.setxyRes(mx - 30, my - 10)
+
+                if change_button.collidepoint((mx, my)) and click:  # changes mode
+                    print("aqui se cambia de modo")
                     click = False
+                    SimulateMode(self.screen, self.clock)
+                    on = False
+
             else:
                 self.paintButtons(False, False)
-
-            for o in self.list_pow:  # Checks for collitions
-                if o.rect.collidepoint((mx, my)) and click:
-                    o.setxy(mx - 50, my - 50)
-
-            for o in self.list_res:  # Checks for collitions
-                if o.rect.collidepoint((mx, my)) and click:
-                    o.setxyRes(mx - 30, my - 10)
 
             if not self.writing:  # refresh screen
                 self.drawElements(mx, my, click)
