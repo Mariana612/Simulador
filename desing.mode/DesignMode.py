@@ -115,7 +115,7 @@ class DesignMode:
                 self.screen.blit(pygame.transform.rotate(res_img, 90), (o.rect.x, o.rect.y))
             else:
                 self.screen.blit(res_img, (o.rect.x, o.rect.y))
-
+ 
         pygame.display.flip()
 
     def designMenu(self):  # Design Menu
