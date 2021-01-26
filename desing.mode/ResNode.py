@@ -7,6 +7,7 @@ class ResNode(object):
         self.name = ""
         self.value = ""
         self.rotated = False
+        self.anchorPoints = None
 
     def checkPlacementRes(self):
         # places y
@@ -31,3 +32,7 @@ class ResNode(object):
     def setxyRes(self, mx, my):
         self.rect.x = mx
         self.rect.y = my
+
+    def setAnchorPoints(self, surface):
+        self.anchorPoints = (pygame.draw.circle(surface, (200, 0, 0), (self.rect.x-40, self.rect.y), 5),
+                             pygame.draw.circle(surface, (200, 0, 0), (self.rect.x+40, self.rect.y), 5))

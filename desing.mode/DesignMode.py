@@ -19,12 +19,14 @@ class DesignMode:
         self.list_res = []
         self.name = ""
         self.value = ""
+        self.currentlyHeldElement = None
 
         # Flags
         self.writing = False
         self.pow = False
         self.name_int = False
         self.value_entry = False
+        self.holdingElement = False
 
         pygame.display.set_caption('Simulador')
         self.designMenu()
@@ -52,10 +54,12 @@ class DesignMode:
             element = PowerNode(350, 250, width, height)
             self.list_pow.append(element)
             self.changeValues(True)
+            element.setAnchorPoints(self.screen)
         else:  # Crea fuente de Resistencia
             element = ResNode(350, 250, width, height)
             self.list_res.append(element)
             self.changeValues(False)
+            element.setAnchorPoints(self.screen)
 
     def changeValues(self, element):  # GUI thingy to change Name and Value
         # Images
@@ -74,11 +78,11 @@ class DesignMode:
         self.screen.blit(white_img, (0, 0))
         if element:
             self.pow = True
-            self.screen.blit(blue_ohms, (100, 194))
+            self.screen.blit(blue, (100, 194))
             self.screen.blit(power_img, (450, 224))
             self.screen.blit(pygame.transform.rotate(power_img, 90), (570, 232))
         else:
-            self.screen.blit(blue, (100, 194))
+            self.screen.blit(blue_ohms, (100, 194))
             self.screen.blit(res_img, (470, 260))
             self.screen.blit(pygame.transform.rotate(res_img, 90), (615, 240))
             self.pow = False
@@ -144,9 +148,10 @@ class DesignMode:
             for event in pygame.event.get():
                 if event.type == MOUSEBUTTONDOWN and event.button == 1:  # check for left mouse click
                     click = True
-                    print(mx,my)
+                    print(mx, my)
                 if event.type == MOUSEBUTTONUP:
                     click = False
+                    self.holdingElement = False
 
                 # Code to write and save info in Node
                 if self.writing:
@@ -238,15 +243,33 @@ class DesignMode:
                     self.paintButtons(False, False)
 
                 for o in self.list_pow:  # Checks for collitions
-                    if o.rect.collidepoint((mx, my)) and click:
+                    if o.rect.collidepoint((mx, my)) and click and not self.holdingElement:
+                        self.holdingElement = True
                         o.setxy(mx - 50, my - 50)
+                        self.currentlyHeldElement = o
 
                 for o in self.list_res:  # Checks for collitions
-                    if o.rect.collidepoint((mx, my)) and click:
+                    if o.rect.collidepoint((mx, my)) and click and not self.holdingElement:
                         if not o.rotated:
+                            self.holdingElement = True
                             o.setxyRes(mx - 30, my - 10)
+                            self.currentlyHeldElement = o
                         else:
+                            self.holdingElement = True
                             o.setxyRes(mx - 13, my - 36)
+                            self.currentlyHeldElement = o
+
+                # Move currently held element
+                if self.holdingElement:
+                    if isinstance(self.currentlyHeldElement, PowerNode):
+                        self.currentlyHeldElement.setxy(mx - 50, my - 50)
+                    else:
+                        if not self.currentlyHeldElement.rotated:
+                            self.currentlyHeldElement.setxyRes(mx - 30, my - 10)
+                        else:
+                            self.currentlyHeldElement.setxyRes(mx - 13, my - 36)
+
+
 
                 if change_button.collidepoint((mx, my)) and click:  # changes mode
                     print("aqui se cambia de modo")
