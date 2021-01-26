@@ -36,8 +36,8 @@ class ResNode(object):
 
     def setAnchorPoints(self):
         if not self.rotated:
-            self.anchorPoints = [pygame.Rect((self.rect.center[0]-37, self.rect.center[1]-9, 10, 10)),
-                                 pygame.Rect((self.rect.center[0]+30, self.rect.center[1]-9, 10, 10))]
+            self.anchorPoints = [pygame.Rect((self.rect.center[0]-35, self.rect.center[1]-9, 10, 10)),
+                                 pygame.Rect((self.rect.center[0]+28, self.rect.center[1]-9, 10, 10))]
         else:
-            self.anchorPoints = [pygame.Rect((self.rect.center[0]-26, self.rect.center[1]-20, 10, 10)),
-                                 pygame.Rect((self.rect.center[0]-26, self.rect.center[1]+45, 10, 10))]
+            self.anchorPoints = [pygame.Rect((self.rect.center[0]-26, self.rect.center[1]-18, 10, 10)),
+                                 pygame.Rect((self.rect.center[0]-26, self.rect.center[1]+43, 10, 10))]

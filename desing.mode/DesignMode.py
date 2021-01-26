@@ -32,6 +32,7 @@ class DesignMode:
         self.mouseOnAnchor = False
         self.drawingLine = False
         self.firstClickDrawingLine = False
+        self.lastClickDrawingLine = False
 
         pygame.display.set_caption('Simulador')
         self.designMenu()
@@ -171,6 +172,7 @@ class DesignMode:
                     print(num_x, num_y)
                 self.list_lines_tuples.append((self.lineFirstPoint, (num_x, num_y)))
                 self.lineFirstPoint = (num_x, num_y)
+
             pygame.draw.aaline(self.screen, (0, 0, 0), self.lineFirstPoint, (nmx, nmy))
 
 
@@ -207,6 +209,7 @@ class DesignMode:
                 if event.type == MOUSEBUTTONDOWN and event.button == 1:  # check for left mouse click
                     click = True
                     self.firstClickDrawingLine = False
+                    self.lastClickDrawingLine = False
                 if event.type == MOUSEBUTTONUP:
                     click = False
                     self.holdingElement = False
@@ -301,11 +304,21 @@ class DesignMode:
                     self.paintButtons(False, False)
 
                 for o in self.list_pow:  # Checks for collitions
-                    if o.anchorPoints[0].collidepoint((mx, my)) and click and not self.holdingElement and not self.drawingLine:
+                    if o.anchorPoints[0].collidepoint((mx, my)) and click and not self.holdingElement and self.drawingLine and not self.firstClickDrawingLine:
+                        self.drawingLine = False
+                        self.lastClickDrawingLine = True
+                        self.list_lines_tuples.append((self.lineFirstPoint, o.anchorPoints[0].center))
+                        self.lineFirstPoint = None
+                    elif o.anchorPoints[1].collidepoint((mx, my)) and click and not self.holdingElement and self.drawingLine and not self.firstClickDrawingLine:
+                        self.drawingLine = False
+                        self.lastClickDrawingLine = True
+                        self.list_lines_tuples.append((self.lineFirstPoint, o.anchorPoints[1].center))
+                        self.lineFirstPoint = None
+                    elif o.anchorPoints[0].collidepoint((mx, my)) and click and not self.holdingElement and not self.drawingLine and not self.lastClickDrawingLine:
                         self.drawingLine = True
                         self.firstClickDrawingLine = True
                         self.lineFirstPoint = o.anchorPoints[0].center
-                    elif o.anchorPoints[1].collidepoint((mx, my)) and click and not self.holdingElement and not self.drawingLine:
+                    elif o.anchorPoints[1].collidepoint((mx, my)) and click and not self.holdingElement and not self.drawingLine and not self.lastClickDrawingLine:
                         self.drawingLine = True
                         self.firstClickDrawingLine = True
                         self.lineFirstPoint = o.anchorPoints[1].center
@@ -316,15 +329,25 @@ class DesignMode:
 
 
                 for o in self.list_res:  # Checks for collitions
-                    if o.anchorPoints[0].collidepoint((mx, my)) and click and not self.holdingElement and not self.drawingLine:
+                    if o.anchorPoints[0].collidepoint((mx, my)) and click and not self.holdingElement and self.drawingLine and not self.firstClickDrawingLine:
+                        self.drawingLine = False
+                        self.lastClickDrawingLine = True
+                        self.list_lines_tuples.append((self.lineFirstPoint, o.anchorPoints[0].center))
+                        self.lineFirstPoint = None
+                    elif o.anchorPoints[1].collidepoint((mx, my)) and click and not self.holdingElement and self.drawingLine and not self.firstClickDrawingLine:
+                        self.drawingLine = False
+                        self.lastClickDrawingLine = True
+                        self.list_lines_tuples.append((self.lineFirstPoint, o.anchorPoints[1].center))
+                        self.lineFirstPoint = None
+                    elif o.anchorPoints[0].collidepoint((mx, my)) and click and not self.holdingElement and not self.drawingLine and not self.lastClickDrawingLine:
                         self.drawingLine = True
                         self.firstClickDrawingLine = True
                         self.lineFirstPoint = o.anchorPoints[0].center
-                    elif o.anchorPoints[1].collidepoint((mx, my)) and click and not self.holdingElement and not self.drawingLine:
+                    elif o.anchorPoints[1].collidepoint((mx, my)) and click and not self.holdingElement and not self.drawingLine and not self.lastClickDrawingLine:
                         self.drawingLine = True
                         self.firstClickDrawingLine = True
                         self.lineFirstPoint = o.anchorPoints[1].center
-                    if o.rect.collidepoint((mx, my)) and click and not self.holdingElement and not self.drawingLine:
+                    elif o.rect.collidepoint((mx, my)) and click and not self.holdingElement and not self.drawingLine:
                         if not o.rotated:
                             self.holdingElement = True
                             o.setxyRes(mx - 30, my - 10)
