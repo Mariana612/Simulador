@@ -8,7 +8,8 @@ class PowerNode(object):
         self.value = ""
         self.rotated = False
         self.sum = 0
-        self.anchorPoints = None
+        self.anchorPoints = [pygame.Rect((self.rect.center[0] - 55, self.rect.center[1] - 10, 10, 10)),
+                             pygame.Rect((self.rect.center[0] + 55, self.rect.center[1] - 10, 10, 10))]
 
     # def recurisve(self,num):
     def checkPlacement(self):
@@ -33,6 +34,12 @@ class PowerNode(object):
         self.rect.x = mx
         self.rect.y = my
 
-    def setAnchorPoints(self, surface):
-        self.anchorPoints = (pygame.draw.circle(surface, (200, 0, 0), (self.rect.x-40, self.rect.y), 5),
-                             pygame.draw.circle(surface, (200, 0, 0), (self.rect.x+40, self.rect.y), 5))
+    def setAnchorPoints(self):
+        if self.rotated:
+            self.anchorPoints = [pygame.Rect((self.rect.center[0] - 55, self.rect.center[1] - 10, 10, 10)),
+                                 pygame.Rect((self.rect.center[0] + 55, self.rect.center[1] - 10, 10, 10))]
+        else:
+            self.anchorPoints = [pygame.Rect((self.rect.center[0] - 5, self.rect.center[1] - 60, 10, 10)),
+                                 pygame.Rect((self.rect.center[0] - 5, self.rect.center[1] + 50, 10, 10))]
+
+

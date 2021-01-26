@@ -17,9 +17,11 @@ class DesignMode:
         # List of Elements
         self.list_pow = []
         self.list_res = []
+        self.list_lines_tuples = []
         self.name = ""
         self.value = ""
         self.currentlyHeldElement = None
+        self.lineFirstPoint = (0,0)
 
         # Flags
         self.writing = False
@@ -27,6 +29,9 @@ class DesignMode:
         self.name_int = False
         self.value_entry = False
         self.holdingElement = False
+        self.mouseOnAnchor = False
+        self.drawingLine = False
+        self.firstClickDrawingLine = False
 
         pygame.display.set_caption('Simulador')
         self.designMenu()
@@ -54,12 +59,11 @@ class DesignMode:
             element = PowerNode(350, 250, width, height)
             self.list_pow.append(element)
             self.changeValues(True)
-            element.setAnchorPoints(self.screen)
+
         else:  # Crea fuente de Resistencia
             element = ResNode(350, 250, width, height)
             self.list_res.append(element)
             self.changeValues(False)
-            element.setAnchorPoints(self.screen)
 
     def changeValues(self, element):  # GUI thingy to change Name and Value
         # Images
@@ -111,19 +115,73 @@ class DesignMode:
         for o in self.list_pow:  # Refresca todos los fuentes de poder
             if (not o.rect.collidepoint((mx, my)) and not click) or (o.rect.collidepoint((mx, my)) and not click):
                 o.checkPlacement()
+                o.setAnchorPoints()
             if o.rotated:
+                o.setAnchorPoints()
                 self.screen.blit(pygame.transform.rotate(power_img, 90), (o.rect.x, o.rect.y))
+                nmx, nmy = pygame.mouse.get_pos()
+                if o.anchorPoints[0].collidepoint((nmx, nmy)) and not self.holdingElement:
+                    pygame.draw.circle(self.screen, (200, 0, 0), o.anchorPoints[0].center, 5)
+                elif o.anchorPoints[1].collidepoint((nmx, nmy)) and not self.holdingElement:
+                    pygame.draw.circle(self.screen, (200, 0, 0), o.anchorPoints[1].center, 5)
+
             else:
+                o.setAnchorPoints()
                 self.screen.blit(power_img, (o.rect.x, o.rect.y))
+                nmx, nmy = pygame.mouse.get_pos()
+                if o.anchorPoints[0].collidepoint((nmx, nmy)) and not self.holdingElement:
+                    pygame.draw.circle(self.screen, (200, 0, 0), o.anchorPoints[0].center, 5)
+                elif o.anchorPoints[1].collidepoint((nmx, nmy)) and not self.holdingElement:
+                    pygame.draw.circle(self.screen, (200, 0, 0), o.anchorPoints[1].center, 5)
+
 
         for o in self.list_res:  # Refresca todos las resistencias
             if (not o.rect.collidepoint((mx, my)) and not click) or (o.rect.collidepoint((mx, my)) and not click):
                 o.checkPlacementRes()
+                o.setAnchorPoints()
             if o.rotated:
+                o.setAnchorPoints()
                 self.screen.blit(pygame.transform.rotate(res_img, 90), (o.rect.x, o.rect.y))
+                nmx, nmy = pygame.mouse.get_pos()
+
+                if o.anchorPoints[0].collidepoint((nmx, nmy)) and not self.holdingElement:
+                    pygame.draw.circle(self.screen, (200, 0, 0), o.anchorPoints[0].center, 5)
+                elif o.anchorPoints[1].collidepoint((nmx, nmy)) and not self.holdingElement:
+                    pygame.draw.circle(self.screen, (200, 0, 0), o.anchorPoints[1].center, 5)
             else:
+                o.setAnchorPoints()
                 self.screen.blit(res_img, (o.rect.x, o.rect.y))
- 
+                nmx, nmy = pygame.mouse.get_pos()
+                if o.anchorPoints[0].collidepoint((nmx, nmy)) and not self.holdingElement:
+                    pygame.draw.circle(self.screen, (200, 0, 0), o.anchorPoints[0].center, 5)
+                elif o.anchorPoints[1].collidepoint((nmx, nmy)) and not self.holdingElement:
+                    pygame.draw.circle(self.screen, (200, 0, 0), o.anchorPoints[1].center, 5)
+
+        if self.drawingLine:
+            if click and not self.firstClickDrawingLine:
+                num_y = 96
+                num_x = 96
+                print(num_x, num_y)
+                nmx, nmy = pygame.mouse.get_pos()
+                while not (num_y - (nmy - 48) >= 0):
+                    num_y += 96
+                    print(num_x, num_y)
+                while not (num_x - (nmx - 48) >= 0):
+                    num_x += 96
+                    print(num_x, num_y)
+                self.list_lines_tuples.append((self.lineFirstPoint, (num_x, num_y)))
+                self.lineFirstPoint = (num_x, num_y)
+            pygame.draw.aaline(self.screen, (0, 0, 0), self.lineFirstPoint, (nmx, nmy))
+
+
+        for o in self.list_lines_tuples:
+            pygame.draw.aaline(self.screen, (0, 0, 0), o[0], o[1])
+
+
+
+
+
+
         pygame.display.flip()
 
     def designMenu(self):  # Design Menu
@@ -148,7 +206,7 @@ class DesignMode:
             for event in pygame.event.get():
                 if event.type == MOUSEBUTTONDOWN and event.button == 1:  # check for left mouse click
                     click = True
-                    print(mx, my)
+                    self.firstClickDrawingLine = False
                 if event.type == MOUSEBUTTONUP:
                     click = False
                     self.holdingElement = False
@@ -243,13 +301,30 @@ class DesignMode:
                     self.paintButtons(False, False)
 
                 for o in self.list_pow:  # Checks for collitions
-                    if o.rect.collidepoint((mx, my)) and click and not self.holdingElement:
+                    if o.anchorPoints[0].collidepoint((mx, my)) and click and not self.holdingElement and not self.drawingLine:
+                        self.drawingLine = True
+                        self.firstClickDrawingLine = True
+                        self.lineFirstPoint = o.anchorPoints[0].center
+                    elif o.anchorPoints[1].collidepoint((mx, my)) and click and not self.holdingElement and not self.drawingLine:
+                        self.drawingLine = True
+                        self.firstClickDrawingLine = True
+                        self.lineFirstPoint = o.anchorPoints[1].center
+                    elif o.rect.collidepoint((mx, my)) and click and not self.holdingElement and not self.drawingLine:
                         self.holdingElement = True
                         o.setxy(mx - 50, my - 50)
                         self.currentlyHeldElement = o
 
+
                 for o in self.list_res:  # Checks for collitions
-                    if o.rect.collidepoint((mx, my)) and click and not self.holdingElement:
+                    if o.anchorPoints[0].collidepoint((mx, my)) and click and not self.holdingElement and not self.drawingLine:
+                        self.drawingLine = True
+                        self.firstClickDrawingLine = True
+                        self.lineFirstPoint = o.anchorPoints[0].center
+                    elif o.anchorPoints[1].collidepoint((mx, my)) and click and not self.holdingElement and not self.drawingLine:
+                        self.drawingLine = True
+                        self.firstClickDrawingLine = True
+                        self.lineFirstPoint = o.anchorPoints[1].center
+                    if o.rect.collidepoint((mx, my)) and click and not self.holdingElement and not self.drawingLine:
                         if not o.rotated:
                             self.holdingElement = True
                             o.setxyRes(mx - 30, my - 10)
