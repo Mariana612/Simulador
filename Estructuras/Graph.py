@@ -28,3 +28,35 @@ class Graph:
     def searchshortestpath(self, Name1, Name2):
         Node1 = self.searchnode(Name1)
         Node2 = self.searchnode(Name2)
+
+    #Ordenamiento de Datos
+    def shellsort(self, list):
+        n = len(list)
+        partition=n//2
+        while partition>0:
+            for i in range(partition,n):
+                temporal=list[i]
+                j=i
+                while j>=partition and list[j-partition]<temporal:
+                    list[j]=list[j-partition]
+                    j-=partition
+                list[j]=temporal
+            partition//=2
+    def QuickSort(self,Lista):
+        self.QuickSortaux(Lista,0,len(Lista)-1)
+    def QuickSortaux(self,Lista,Low,High):
+        if Low<High:
+            index=self.Partition(Lista,Low,High)
+
+            self.QuickSortaux(Lista,Low,index-1)
+            self.QuickSortaux(Lista,index,High)
+    def Partition(self,Lista,Low,High):
+        index=Low-1
+        pivot=Lista[High]
+        for i in range(Low,High):
+            if Lista[i]<pivot:
+                index=index+1
+                Lista[index],Lista[i]=Lista[i],Lista[index]
+        Lista[index+1],Lista[High]=Lista[High],Lista[index+1]
+        return i+1
+
