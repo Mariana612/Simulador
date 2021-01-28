@@ -4,7 +4,7 @@ import sys
 
 
 class SimulateMode:
-    def __init__(self,screen,clock,list_pow, list_res):
+    def __init__(self, screen, clock, list_pow, list_res, list_lines_tuples):
         self.screen = screen
         self.screen.fill([205,200,200])
         self.font = pygame.font.SysFont('timesnewroman', 20)
@@ -12,8 +12,10 @@ class SimulateMode:
 
         self.list_pow = list_pow
         self.list_res = list_res
+        self.list_lines_tuples = list_lines_tuples
 
         self.initialCall()
+
 
     def drawElements(self, mx, my, click):  # Refresh elements in screen
         # Images
@@ -38,6 +40,9 @@ class SimulateMode:
                 self.screen.blit(pygame.transform.rotate(res_img, 90), (o.rect.x, o.rect.y))
             else:
                 self.screen.blit(res_img, (o.rect.x, o.rect.y))
+
+        for o in self.list_lines_tuples:
+            pygame.draw.aaline(self.screen, (0, 0, 0), o[0], o[1])
 
         pygame.display.flip()
 

@@ -4,6 +4,7 @@ from pygame.locals import *
 from PowerNode import PowerNode
 from ResNode import ResNode
 from SimulateMode import SimulateMode
+from Graph import Graph
 
 
 class DesignMode:
@@ -18,10 +19,15 @@ class DesignMode:
         self.list_pow = []
         self.list_res = []
         self.list_lines_tuples = []
+        self.list_lines_connections = []
+        self.list_nodes = []
         self.name = ""
         self.value = ""
         self.currentlyHeldElement = None
-        self.lineFirstPoint = (0,0)
+        self.lineFirstPoint = (0, 0)
+        self.nodeFirstPoint = (0, 0)
+        self.graph = Graph()
+        self.lastLookedAtNode = None
 
         # Flags
         self.writing = False
@@ -33,6 +39,7 @@ class DesignMode:
         self.drawingLine = False
         self.firstClickDrawingLine = False
         self.lastClickDrawingLine = False
+        self.validCircuit = False
 
         pygame.display.set_caption('Simulador')
         self.designMenu()
@@ -308,20 +315,26 @@ class DesignMode:
                         self.drawingLine = False
                         self.lastClickDrawingLine = True
                         self.list_lines_tuples.append((self.lineFirstPoint, o.anchorPoints[0].center))
+                        self.list_lines_connections.append((self.nodeFirstPoint, o.anchorPoints[0].center))
                         self.lineFirstPoint = None
+                        self.nodeFirstPoint = None
                     elif o.anchorPoints[1].collidepoint((mx, my)) and click and not self.holdingElement and self.drawingLine and not self.firstClickDrawingLine:
                         self.drawingLine = False
                         self.lastClickDrawingLine = True
                         self.list_lines_tuples.append((self.lineFirstPoint, o.anchorPoints[1].center))
+                        self.list_lines_connections.append((self.nodeFirstPoint, o.anchorPoints[1].center))
                         self.lineFirstPoint = None
+                        self.nodeFirstPoint = None
                     elif o.anchorPoints[0].collidepoint((mx, my)) and click and not self.holdingElement and not self.drawingLine and not self.lastClickDrawingLine:
                         self.drawingLine = True
                         self.firstClickDrawingLine = True
                         self.lineFirstPoint = o.anchorPoints[0].center
+                        self.nodeFirstPoint = o.anchorPoints[0].center
                     elif o.anchorPoints[1].collidepoint((mx, my)) and click and not self.holdingElement and not self.drawingLine and not self.lastClickDrawingLine:
                         self.drawingLine = True
                         self.firstClickDrawingLine = True
                         self.lineFirstPoint = o.anchorPoints[1].center
+                        self.nodeFirstPoint = o.anchorPoints[1].center
                     elif o.rect.collidepoint((mx, my)) and click and not self.holdingElement and not self.drawingLine:
                         self.holdingElement = True
                         o.setxy(mx - 50, my - 50)
@@ -333,20 +346,26 @@ class DesignMode:
                         self.drawingLine = False
                         self.lastClickDrawingLine = True
                         self.list_lines_tuples.append((self.lineFirstPoint, o.anchorPoints[0].center))
+                        self.list_lines_connections.append((self.nodeFirstPoint, o.anchorPoints[1].center))
                         self.lineFirstPoint = None
+                        self.nodeFirstPoint = None
                     elif o.anchorPoints[1].collidepoint((mx, my)) and click and not self.holdingElement and self.drawingLine and not self.firstClickDrawingLine:
                         self.drawingLine = False
                         self.lastClickDrawingLine = True
                         self.list_lines_tuples.append((self.lineFirstPoint, o.anchorPoints[1].center))
+                        self.list_lines_connections.append((self.nodeFirstPoint, o.anchorPoints[1].center))
                         self.lineFirstPoint = None
+                        self.nodeFirstPoint = None
                     elif o.anchorPoints[0].collidepoint((mx, my)) and click and not self.holdingElement and not self.drawingLine and not self.lastClickDrawingLine:
                         self.drawingLine = True
                         self.firstClickDrawingLine = True
                         self.lineFirstPoint = o.anchorPoints[0].center
+                        self.nodeFirstPoint = o.anchorPoints[0].center
                     elif o.anchorPoints[1].collidepoint((mx, my)) and click and not self.holdingElement and not self.drawingLine and not self.lastClickDrawingLine:
                         self.drawingLine = True
                         self.firstClickDrawingLine = True
                         self.lineFirstPoint = o.anchorPoints[1].center
+                        self.nodeFirstPoint = o.anchorPoints[1].center
                     elif o.rect.collidepoint((mx, my)) and click and not self.holdingElement and not self.drawingLine:
                         if not o.rotated:
                             self.holdingElement = True
@@ -370,9 +389,9 @@ class DesignMode:
 
 
                 if change_button.collidepoint((mx, my)) and click:  # changes mode
-                    print("aqui se cambia de modo")
+                    self.checkCircuitValidity()
                     click = False
-                    SimulateMode(self.screen, self.clock, self.list_pow,self.list_res)
+                    SimulateMode(self.screen, self.clock, self.list_pow, self.list_res, self.list_lines_tuples)
                     on = False
 
             else:
@@ -380,3 +399,149 @@ class DesignMode:
 
             if not self.writing:  # refresh screen
                 self.drawElements(mx, my, click)
+
+    def checkCircuitValidity(self):
+        if len(self.list_pow) > 1:
+            return False
+        voltageSource = self.list_pow[0]
+        firstAnchorPoint = voltageSource.anchorPoints[0]
+        lastAnchorPoint = voltageSource.anchorPoints[1]
+        self.resolveNodes(firstAnchorPoint, lastAnchorPoint)
+
+
+
+    def resolveNodes(self, firstAnchorPoint, lastAnchorPoint):
+        for line in self.list_lines_connections:
+            if line[0] == firstAnchorPoint:
+                if line[1] == lastAnchorPoint:
+                    if self.checkNodeExistence(line[0]):
+                        if self.checkNodeExistence(line[1]):
+                            continue
+                        else:
+                            self.lastLookedAtNode.Points.append(line[1])
+                            self.validCircuit = True
+                            self.resolveNodes(line[1], lastAnchorPoint)
+                            continue
+                    elif self.checkNodeExistence(line[1]):
+                        self.lastLookedAtNode.Points.append(line[0])
+                        continue
+                    else:
+                        node = self.graph.addnode("node"+str(len(self.list_nodes)), 0)
+                        node.Points.append(line[0])
+                        node.Points.append(line[1])
+                        self.list_nodes.append(node)
+                        self.validCircuit = True
+                        self.resolveNodes(line[1], lastAnchorPoint)
+                        continue
+                for res in self.list_res:
+                    if res.anchorPoints[0] == line[1]:
+                        if self.checkNodeExistence(line[0]):
+                            if self.checkNodeExistence(line[1]):
+                                break
+                            else:
+                                self.lastLookedAtNode.Points.append(line[1])
+                                self.resolveNodes(res.anchorPoints[1], lastAnchorPoint)
+                                self.resolveNodes(line[1], lastAnchorPoint)
+                                break
+                        elif self.checkNodeExistence(line[1]):
+                            self.lastLookedAtNode.Points.append(line[0])
+                            break
+                        else:
+                            node = self.graph.addnode("node" + str(len(self.list_nodes)), 0)
+                            node.Points.append(line[0])
+                            node.Points.append(line[1])
+                            self.list_nodes.append(node)
+                            self.resolveNodes(res.anchorPoints[1], lastAnchorPoint)
+                            self.resolveNodes(line[1], lastAnchorPoint)
+                            break
+                    elif res.anchorPoints[1] == line[1]:
+                        if self.checkNodeExistence(line[0]):
+                            if self.checkNodeExistence(line[1]):
+                                break
+                            else:
+                                self.lastLookedAtNode.Points.append(line[1])
+                                self.resolveNodes(res.anchorPoints[1], lastAnchorPoint)
+                                self.resolveNodes(line[1], lastAnchorPoint)
+                                break
+                        elif self.checkNodeExistence(line[1]):
+                            self.lastLookedAtNode.Points.append(line[0])
+                            break
+                        else:
+                            node = self.graph.addnode("node" + str(len(self.list_nodes)), 0)
+                            node.Points.append(line[0])
+                            node.Points.append(line[1])
+                            self.list_nodes.append(node)
+                            self.resolveNodes(res.anchorPoints[0], lastAnchorPoint)
+                            self.resolveNodes(line[1], lastAnchorPoint)
+                            break
+            elif line[1] == firstAnchorPoint:
+                if line[0] == lastAnchorPoint:
+                    if self.checkNodeExistence(line[1]):
+                        if self.checkNodeExistence(line[0]):
+                            continue
+                        else:
+                            self.lastLookedAtNode.Points.append(line[0])
+                            self.validCircuit = True
+                            self.resolveNodes(line[0], lastAnchorPoint)
+                            continue
+                    elif self.checkNodeExistence(line[0]):
+                        self.lastLookedAtNode.Points.append(line[1])
+                        continue
+                    else:
+                        node = self.graph.addnode("node" + str(len(self.list_nodes)), 0)
+                        node.Points.append(line[1])
+                        node.Points.append(line[0])
+                        self.list_nodes.append(node)
+                        self.validCircuit = True
+                        self.resolveNodes(line[0], lastAnchorPoint)
+                        continue
+                for res in self.list_res:
+                    if res.anchorPoints[0] == line[0]:
+                        if self.checkNodeExistence(line[1]):
+                            if self.checkNodeExistence(line[0]):
+                                break
+                            else:
+                                self.lastLookedAtNode.Points.append(line[0])
+                                self.resolveNodes(res.anchorPoints[1], lastAnchorPoint)
+                                self.resolveNodes(line[0], lastAnchorPoint)
+                                break
+                        elif self.checkNodeExistence(line[0]):
+                            self.lastLookedAtNode.Points.append(line[1])
+                            break
+                        else:
+                            node = self.graph.addnode("node" + str(len(self.list_nodes)), 0)
+                            node.Points.append(line[1])
+                            node.Points.append(line[0])
+                            self.list_nodes.append(node)
+                            self.resolveNodes(res.anchorPoints[1], lastAnchorPoint)
+                            self.resolveNodes(line[0], lastAnchorPoint)
+                            break
+                    elif res.anchorPoints[1] == line[0]:
+                        if self.checkNodeExistence(line[1]):
+                            if self.checkNodeExistence(line[0]):
+                                break
+                            else:
+                                self.lastLookedAtNode.Points.append(line[0])
+                                self.resolveNodes(res.anchorPoints[1], lastAnchorPoint)
+                                self.resolveNodes(line[0], lastAnchorPoint)
+                                break
+                        elif self.checkNodeExistence(line[0]):
+                            self.lastLookedAtNode.Points.append(line[1])
+                            break
+                        else:
+                            node = self.graph.addnode("node" + str(len(self.list_nodes)), 0)
+                            node.Points.append(line[1])
+                            node.Points.append(line[0])
+                            self.list_nodes.append(node)
+                            self.resolveNodes(res.anchorPoints[0], lastAnchorPoint)
+                            self.resolveNodes(line[0], lastAnchorPoint)
+                            break
+
+    def checkNodeExistence(self, point):
+        for node in self.list_nodes:
+            for nodePoint in node.Points:
+                if point == nodePoint:
+                    return True
+        self.lastLookedAtNode = node
+        return False
+
