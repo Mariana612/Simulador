@@ -4,8 +4,5 @@ class Node:
         self.value = value
         self.Conections = {}
 
-    def addconnection(self, Node):
-        self.Conections[Node.name] = 0
-
-    def setpeso(self, Node, peso):
-        self.Conections[Node.name] = peso
+    def addconnection(self, Node,Peso):
+        self.Conections[Node.name] = Peso

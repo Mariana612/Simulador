@@ -18,12 +18,14 @@ class Graph:
         NewNode = Node.Node(name, value)
         # Adición a la lista de nodos
         self._Nodes.append(NewNode)
+        return NewNode
 
-    def makeconection(self, Name1, Name2):
+
+    def makeconection(self, Name1, Name2, peso):
         # Registrar conexión en el primer nodo
-        self.searchnode(Name1).addconnection(self.searchnode(Name2))
+        self.searchnode(Name1).addconnection(self.searchnode(Name2),peso)
         # Registrar conexión en el segundo nodo
-        self.searchnode(Name2).addconnection(self.searchnode(Name1))
+        self.searchnode(Name2).addconnection(self.searchnode(Name1),peso)
 
     def searchshortestpath(self, Name1, Name2):
         Node1 = self.searchnode(Name1)
