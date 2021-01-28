@@ -36,7 +36,7 @@ class Graph:
                 Node2.eliminateConnection(Node2,self.searchnode(i))
             else:
                 self.makeconection(Node1.name,i,Node2.Conections[i])
-                Node2.eliminateConnecion(Node2,self.searchnode(i))
+                Node2.eliminateConnection(Node2,self.searchnode(i))
         self._Nodes.remove(Node2)
         Node2.Points=[]
 
@@ -85,7 +85,6 @@ Grafo.addnode("Mike",12)
 Grafo.addnode("Kory",90)
 Grafo.addnode("Banana",34)
 Grafo.makeconection("Mike","Kory",23)
-Grafo.makeconection("Kory","Banana",90)
 Grafo.makeconection("Banana","Mike",7)
 Grafo.searchnode("Banana").Points=[1,2,3,4]
 Grafo.searchnode("Mike").Points=[4,5,6,7]
