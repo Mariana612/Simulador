@@ -5,6 +5,7 @@ class Graph:
     def __init__(self):
         self._Nodes = []
 
+    #Funciones útiles para el grupo
     def searchnode(self, Name):
         # Busqueda del nodo mediante el nombre
         for i in range(0, len(self._Nodes)):
@@ -12,7 +13,6 @@ class Graph:
                 return self._Nodes[i]
             else:
                 continue
-
     def addnode(self, name, value):
         # Creación del nodo
         NewNode = Node.Node(name, value)
@@ -41,6 +41,7 @@ class Graph:
         self._Nodes.remove(Node2)
         Node2.Points=[]
 
+
     def makeconection(self, Name1, Name2, peso):
         # Registrar conexión en el primer nodo
         self.searchnode(Name1).addconnection(self.searchnode(Name2),peso)
@@ -48,10 +49,23 @@ class Graph:
         self.searchnode(Name2).addconnection(self.searchnode(Name1),peso)
 
     def searchshortestpath(self, Name1, Name2):
+        self.resetDijkstra(self._Nodes,True)
         Node1 = self.searchnode(Name1)
         Node2 = self.searchnode(Name2)
+        self.Dijkstra(Node1,True)
+        return Node2.path
+    def searchlongestpath(self,Name1,Name2):
+        self.resetDijkstra(self._Nodes,False)
+        Node1 = self.searchnode(Name1)
+        Node2 = self.searchnode(Name2)
+        self.Dijkstra(Node1,False)
+        return Node2.path
+
 
     #Ordenamiento de Datos
+
+    #Shell Sort de mayor a menor
+
     def shellsort(self, list):
         n = len(list)
         partition=n//2
@@ -64,14 +78,19 @@ class Graph:
                     j-=partition
                 list[j]=temporal
             partition//=2
+
+    #QuickSort de menor a mayor
+
     def QuickSort(self,Lista):
         self.QuickSortaux(Lista,0,len(Lista)-1)
+
     def QuickSortaux(self,Lista,Low,High):
         if Low<High:
             index=self.Partition(Lista,Low,High)
 
             self.QuickSortaux(Lista,Low,index-1)
             self.QuickSortaux(Lista,index,High)
+
     def Partition(self,Lista,Low,High):
         index=Low-1
         pivot=Lista[High]
@@ -82,13 +101,77 @@ class Graph:
         Lista[index+1],Lista[High]=Lista[High],Lista[index+1]
         return i+1
 
+
+    #Funciones del algoritmo de Dijkstra
+        #Funciones para corto
+
+    def Dijkstra(self,Node1,Short):
+        Node1.Distance=0
+        VisitedNodes=[]
+        UnvisitedNodes=[Node1]
+        while len(UnvisitedNodes)!=0:
+            currentNode=self.LowestDistance(UnvisitedNodes)
+            UnvisitedNodes.remove(currentNode)
+            for key in currentNode.Conections.keys():
+                adjacentNode=self.searchnode(key)
+                value=currentNode.Conections[key]
+                if (adjacentNode not in VisitedNodes):
+                    self.MinimumDistance(adjacentNode,value,currentNode,Short)
+                    UnvisitedNodes.append(adjacentNode)
+            VisitedNodes.append(currentNode)
+
+    def MinimumDistance(self,evaluationNode,weight,sourceNode,Short):
+        SourceDistance=sourceNode.Distance
+        if Short:
+            if (SourceDistance+weight<evaluationNode.Distance):
+                evaluationNode.Distance=SourceDistance+weight
+                Shortestpath=[]
+                Shortestpath+=sourceNode.path
+                Shortestpath.append(sourceNode)
+                evaluationNode.path=Shortestpath
+        else:
+            if (SourceDistance+weight>evaluationNode.Distance):
+                evaluationNode.Distance=SourceDistance+weight
+                Shortestpath=[]
+                Shortestpath+=sourceNode.path
+                Shortestpath.append(sourceNode)
+                evaluationNode.path=Shortestpath
+    def LowestDistance(self,NodeList):
+        LowestDistanceNode=None
+        lowestdistance=float("inf")
+        for Node in NodeList:
+            nodeDistance=Node.Distance
+            if nodeDistance<lowestdistance:
+                lowestdistance=nodeDistance
+                LowestDistanceNode=Node
+        return LowestDistanceNode
+        #Funciones para largo
+
+
+    def resetDijkstra(self,Lista,Short):
+        for i in Lista:
+            if Short:
+                i.Distance=float("inf")
+                i.path=[]
+            else:
+                i.Distance=-float("inf")
+                i.path=[]
+
 Grafo=Graph()
-Grafo.addnode("Mike",12)
-Grafo.addnode("Kory",90)
-Grafo.addnode("Banana",34)
-Grafo.makeconection("Mike","Kory",23)
-Grafo.makeconection("Banana","Mike",7)
-Grafo.searchnode("Banana").Points=[1,2,3,4]
-Grafo.searchnode("Mike").Points=[4,5,6,7]
-Grafo.fusenodes("Banana","Mike")
+Grafo.addnode("A",32)
+Grafo.addnode("B",65)
+Grafo.addnode("C",90)
+Grafo.addnode("D",65)
+Grafo.addnode("E",89)
+Grafo.addnode("F",43)
+Grafo.makeconection("F","A",3)
+Grafo.makeconection("A","B",1)
+Grafo.makeconection("A","C",5)
+Grafo.makeconection("A","D",5)
+Grafo.makeconection("B","C",3)
+Grafo.makeconection("C","E",1)
+Grafo.makeconection("D","E",3)
+Grafo.searchshortestpath("A","E")
+print(Grafo.searchnode("E").Distance)
+Grafo.searchlongestpath("F","C")
 print("Fin")
