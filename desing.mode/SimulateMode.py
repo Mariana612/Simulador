@@ -4,16 +4,18 @@ import sys
 
 
 class SimulateMode:
-    def __init__(self, screen, clock, list_pow, list_res, list_lines_tuples):
+    def __init__(self, screen, clock, list_pow, list_res, list_lines_tuples, graph, list_lines_connections, list_nodes):
         self.screen = screen
         self.screen.fill([205,200,200])
         self.font = pygame.font.SysFont('timesnewroman', 20)
         self.clock = clock
+        self.graph = graph
 
         self.list_pow = list_pow
         self.list_res = list_res
         self.list_lines_tuples = list_lines_tuples
-
+        self.list_lines_connections = list_lines_connections
+        self.list_nodes = list_nodes
         self.initialCall()
 
 

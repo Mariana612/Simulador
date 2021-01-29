@@ -19,6 +19,7 @@ class Graph:
         # Adición a la lista de nodos
         self._Nodes.append(NewNode)
         return NewNode
+
     def fusenodes(self,Name1,Name2):
         Node1=self.searchnode(Name1)
         Node2=self.searchnode(Name2)
@@ -45,6 +46,7 @@ class Graph:
         self.searchnode(Name1).addconnection(self.searchnode(Name2),peso)
         # Registrar conexión en el segundo nodo
         self.searchnode(Name2).addconnection(self.searchnode(Name1),peso)
+
     def searchshortestpath(self, Name1, Name2):
         Node1 = self.searchnode(Name1)
         Node2 = self.searchnode(Name2)

@@ -5,6 +5,7 @@ from PowerNode import PowerNode
 from ResNode import ResNode
 from SimulateMode import SimulateMode
 from Estructuras import Graph
+from random import *
 
 
 class DesignMode:
@@ -387,15 +388,12 @@ class DesignMode:
 
 
                 if change_button.collidepoint((mx, my)) and click:  # changes mode
-                    print(self.list_lines_connections)
-                    self.list_nodes = []
-                    self.graph = None
                     self.checkCircuitValidity()
-                    """
-                    click = False
-                    SimulateMode(self.screen, self.clock, self.list_pow, self.list_res, self.list_lines_tuples)
-                    on = False
-                    """
+                    if self.validCircuit:
+                        click = False
+                        SimulateMode(self.screen, self.clock, self.list_pow, self.list_res, self.list_lines_tuples, self.graph, self.list_lines_tuples, self.list_lines_connections, self.list_nodes)
+                        on = False
+
 
             else:
                 self.paintButtons(False, False)
@@ -416,6 +414,12 @@ class DesignMode:
             print(i.Points)
             print("--------------")
         print("DONE")
+        if self.validCircuit:
+            self.makeNodeConnections()
+        else:
+            self.graph = Graph.Graph()
+            self.list_nodes = []
+
 
 
 
@@ -638,3 +642,15 @@ class DesignMode:
                 if point2 == nodePoint:
                     node2 = node
         return node1, node2
+
+    def makeNodeConnections(self):
+        for resistance in self.list_res:
+            node1 = None
+            node2 = None
+            for node in self.list_nodes:
+                for point in node.Points:
+                    if resistance.anchorPoints[0].center == point:
+                        node1 = node
+                    elif resistance.anchorPoints[1].center == point:
+                        node2 = node
+            self.graph.makeconection(node1, node2, randint(0, 10))
