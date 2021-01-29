@@ -60,15 +60,18 @@ class DesignMode:
         self.screen.blit(rectangle_img, [772, 62])  # fix transparency
         self.screen.blit(power_img_on if touched1 else power_img, [825, 200])
         self.screen.blit(res_img_on if touched2 else res_img, [845, 330])
-        rectangle = pygame.draw.rect(self.screen, (81, 125, 164), (825, 420, 100, 34))
-        rectangle = pygame.draw.rect(self.screen, (81, 125, 164), (825, 130, 100, 34))
+        pygame.draw.rect(self.screen, (81, 125, 164), (825, 420, 100, 34))
+        pygame.draw.rect(self.screen, (81, 125, 164), (825, 130, 100, 34))
         text_del = self.font.render("delete lines", True, (225, 225, 225))
         self.screen.blit(text_del, [830, 135])
-        rectangle = pygame.draw.rect(self.screen, (81, 125, 164), (825, 75, 100, 34))
+        pygame.draw.rect(self.screen, (81, 125, 164), (825, 75, 100, 34))
         text_del = self.font.render("delete", True, (225, 225, 225))
         self.screen.blit(text_del, [848, 80])
         text = self.font.render("simulate", True, (225, 225, 225))
         self.screen.blit(text, [840, 425])
+        pygame.draw.rect(self.screen, (81, 125, 164), (825, 475, 100, 34))
+        text_exp = self.font.render("export", True, (225, 225, 225))
+        self.screen.blit(text_exp, [850, 480])
         pygame.display.flip()
         self.clock.tick(14)
 
@@ -236,6 +239,44 @@ class DesignMode:
 
         pygame.display.flip()
 
+    def exportMenu(self):
+        running = True
+        filenameString = ""
+        LIGHTBLUE = (154,169,182)
+        WHITE = (255,255,255)
+
+
+        while running:
+            click = False
+            for event in pygame.event.get():  # check events here
+                if event.type == QUIT:  # leave application
+                    running = False
+                elif event.type == KEYDOWN:
+                    if event.key == K_ESCAPE:
+                        running = False
+                    if event.key == pygame.K_BACKSPACE:
+                        filenameString = filenameString[:-1]
+                    elif self.font.size(filenameString + event.unicode)[0] < 190: #[0] accesa el width ya que returna (w,h)
+                        filenameString += event.unicode
+                        #TODO:write shit
+                        pass
+                elif event.type == MOUSEBUTTONDOWN and event.button == 1:  # check for left mouse click
+                    click = True
+
+            if running:  # tal vez ocupe agregar un blit al fondo
+                pygame.draw.rect(self.screen, LIGHTBLUE,(250,194,330,213))
+                pygame.draw.rect(self.screen, WHITE, (300, 290, 200, 30))
+                text = self.font.render("Insert export filename:", True, WHITE)
+                self.screen.blit(text, [323, 230])
+                text = self.font.render(".txt", True, (0,0,0))
+                self.screen.blit(text, [505, 295])
+                text = self.font.render(filenameString, True, (0,0,0))
+                self.screen.blit(text, [305, 295])
+                pygame.display.flip()
+                self.clock.tick(60)
+
+        return
+
     def designMenu(self):  # Design Menu
         # Flags
         on = True
@@ -255,7 +296,9 @@ class DesignMode:
             change_button = pygame.Rect((825, 420, 100, 34))
             delete_button = pygame.Rect((825, 130, 100, 34))
             delete_thingy_button = pygame.Rect((825, 75, 100, 34))
+            export_button = pygame.Rect((825, 475, 100, 34))
 
+            click = False
             for event in pygame.event.get():
                 if event.type == MOUSEBUTTONDOWN and event.button == 1:  # check for left mouse click
                     click = True
@@ -336,8 +379,6 @@ class DesignMode:
                 # Closes Simulator
                 if event.type == QUIT or (event.type == KEYDOWN and event.key == K_ESCAPE):  # leave application
                     on = False
-                    pygame.quit()
-                    sys.exit()
 
             # Buttons
             power_button = pygame.Rect(825, 200, 100, 110)
@@ -363,6 +404,11 @@ class DesignMode:
 
                 if delete_thingy_button.collidepoint((mx, my)) and click:
                     self.remove_thingy = True
+
+                if export_button.collidepoint((mx,my)) and click:
+                    self.exportMenu()
+                    click = False
+                #TODO: poner aquí ventana para exportar
 
                 if self.remove:
                     for elements in self.list_lines_tuples:

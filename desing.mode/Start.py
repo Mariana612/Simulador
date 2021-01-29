@@ -27,6 +27,7 @@ class Start:
         click = False
         while on:
             mx, my = pygame.mouse.get_pos()
+            click = False
             for event in pygame.event.get():
                 if event.type == MOUSEBUTTONDOWN and event.button == 1:  # check for left mouse click
                     click = True
@@ -52,10 +53,9 @@ class Start:
 
             if design_rect.collidepoint((mx, my)) and click:
                 DesignMode(self.screen, self.clock)
-                on = False
 
             if import_rect.collidepoint((mx, my)) and click:
-                on = False
+                pass
 
 
 start = Start()
