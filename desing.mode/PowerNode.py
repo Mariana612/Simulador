@@ -42,4 +42,5 @@ class PowerNode(object):
             self.anchorPoints = [pygame.Rect((self.rect.center[0] - 5, self.rect.center[1] - 60, 10, 10)),
                                  pygame.Rect((self.rect.center[0] - 5, self.rect.center[1] + 50, 10, 10))]
 
-
+    def toDict(self):
+        return {"x": self.rect.x,"y": self.rect.y,"width": self.rect.width,"height": self.rect.height}

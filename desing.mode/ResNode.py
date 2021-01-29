@@ -26,7 +26,7 @@ class ResNode(object):
             num += 96
         self.setxyRes(self.rect.x, num)
 
-        while not (num_x - (self.rect.x-24) >= 0):
+        while not (num_x - (self.rect.x - 24) >= 0):
             num_x += 96
         self.setxyRes(num_x, self.rect.y)
 
@@ -36,8 +36,11 @@ class ResNode(object):
 
     def setAnchorPoints(self):
         if not self.rotated:
-            self.anchorPoints = [pygame.Rect((self.rect.center[0]-35, self.rect.center[1]-9, 10, 10)),
-                                 pygame.Rect((self.rect.center[0]+28, self.rect.center[1]-9, 10, 10))]
+            self.anchorPoints = [pygame.Rect((self.rect.center[0] - 35, self.rect.center[1] - 9, 10, 10)),
+                                 pygame.Rect((self.rect.center[0] + 28, self.rect.center[1] - 9, 10, 10))]
         else:
-            self.anchorPoints = [pygame.Rect((self.rect.center[0]-26, self.rect.center[1]-18, 10, 10)),
-                                 pygame.Rect((self.rect.center[0]-26, self.rect.center[1]+43, 10, 10))]
+            self.anchorPoints = [pygame.Rect((self.rect.center[0] - 26, self.rect.center[1] - 18, 10, 10)),
+                                 pygame.Rect((self.rect.center[0] - 26, self.rect.center[1] + 43, 10, 10))]
+
+    def toDict(self):
+        return {"x": self.rect.x, "y": self.rect.y, "width": self.rect.width, "height": self.rect.height}

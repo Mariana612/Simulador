@@ -239,11 +239,33 @@ class DesignMode:
 
         pygame.display.flip()
 
+    def exportCircuit(self,filename):
+        import json, os
+        powerList=[]
+        resList=[]
+        for pow in self.list_pow:
+            powerList.append(pow.toDict())
+        for res in self.list_res:
+            resList.append(res.toDict())
+
+        circuitList = [powerList, resList, self.list_lines_tuples, self.list_lines_connections]
+        #circuitJSON = json.dumps(circuitList)
+
+        path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'circuits')) #agarra el path de circuits
+        os.makedirs(path, exist_ok=True) #crea el directorio de circuits si no existe
+        with open(os.path.join(path,filename+'.txt'), 'w', encoding='utf-8') as f: #hay que acer el path.join para que cree un archivo y no un directorio
+            json.dump(circuitList, f, ensure_ascii=False, indent=4)
+
+
     def exportMenu(self):
+        from pathvalidate import sanitize_filepath
         running = True
         filenameString = ""
         LIGHTBLUE = (154,169,182)
         WHITE = (255,255,255)
+        ORANGE = (253,160,40)
+        cancel_button = pygame.Rect((280, 350, 100, 40))
+        accept_button = pygame.Rect((450, 350, 100, 40))
 
 
         while running:
@@ -251,6 +273,8 @@ class DesignMode:
             for event in pygame.event.get():  # check events here
                 if event.type == QUIT:  # leave application
                     running = False
+                    pygame.quit()
+                    sys.exit()
                 elif event.type == KEYDOWN:
                     if event.key == K_ESCAPE:
                         running = False
@@ -258,10 +282,17 @@ class DesignMode:
                         filenameString = filenameString[:-1]
                     elif self.font.size(filenameString + event.unicode)[0] < 190: #[0] accesa el width ya que returna (w,h)
                         filenameString += event.unicode
-                        #TODO:write shit
-                        pass
+                        filenameString = sanitize_filepath(filenameString)
                 elif event.type == MOUSEBUTTONDOWN and event.button == 1:  # check for left mouse click
                     click = True
+
+            mx, my = pygame.mouse.get_pos()
+            if accept_button.collidepoint((mx, my)) and click:
+                if len(filenameString) > 0:
+                    self.exportCircuit(filenameString)
+                    running = False
+            elif cancel_button.collidepoint((mx, my)) and click:
+                running=False
 
             if running:  # tal vez ocupe agregar un blit al fondo
                 pygame.draw.rect(self.screen, LIGHTBLUE,(250,194,330,213))
@@ -272,10 +303,18 @@ class DesignMode:
                 self.screen.blit(text, [505, 295])
                 text = self.font.render(filenameString, True, (0,0,0))
                 self.screen.blit(text, [305, 295])
+                #botones
+                pygame.draw.rect(self.screen, ORANGE, cancel_button)
+                pygame.draw.rect(self.screen, ORANGE, accept_button)
+                text = self.font.render("Cancel", True, WHITE)
+                self.screen.blit(text, [300, 359])
+                text = self.font.render("Accept", True, WHITE)
+                self.screen.blit(text, [472, 359])
                 pygame.display.flip()
                 self.clock.tick(60)
 
         return
+
 
     def designMenu(self):  # Design Menu
         # Flags
@@ -377,7 +416,10 @@ class DesignMode:
                     pygame.display.flip()
 
                 # Closes Simulator
-                if event.type == QUIT or (event.type == KEYDOWN and event.key == K_ESCAPE):  # leave application
+                if event.type == QUIT:
+                    pygame.quit()
+                    sys.exit()
+                elif (event.type == KEYDOWN and event.key == K_ESCAPE):  # leave application
                     on = False
 
             # Buttons
@@ -408,7 +450,6 @@ class DesignMode:
                 if export_button.collidepoint((mx,my)) and click:
                     self.exportMenu()
                     click = False
-                #TODO: poner aquí ventana para exportar
 
                 if self.remove:
                     for elements in self.list_lines_tuples:
