@@ -42,6 +42,8 @@ class DesignMode:
         self.firstClickDrawingLine = False
         self.lastClickDrawingLine = False
         self.validCircuit = False
+        self.remove = False
+        self.remove_thingy = False
 
         pygame.display.set_caption('Simulador')
         self.designMenu()
@@ -59,6 +61,12 @@ class DesignMode:
         self.screen.blit(power_img_on if touched1 else power_img, [825, 200])
         self.screen.blit(res_img_on if touched2 else res_img, [845, 330])
         rectangle = pygame.draw.rect(self.screen, (81, 125, 164), (825, 420, 100, 34))
+        rectangle = pygame.draw.rect(self.screen, (81, 125, 164), (825, 130, 100, 34))
+        text_del = self.font.render("delete lines", True, (225, 225, 225))
+        self.screen.blit(text_del, [830, 135])
+        rectangle = pygame.draw.rect(self.screen, (81, 125, 164), (825, 75, 100, 34))
+        text_del = self.font.render("delete", True, (225, 225, 225))
+        self.screen.blit(text_del, [848, 80])
         text = self.font.render("simulate", True, (225, 225, 225))
         self.screen.blit(text, [840, 425])
         pygame.display.flip()
@@ -245,6 +253,8 @@ class DesignMode:
             blue_rect_l = pygame.Rect((470, 355, 70, 25))
             blue_rect_r = pygame.Rect((590, 355, 70, 25))
             change_button = pygame.Rect((825, 420, 100, 34))
+            delete_button = pygame.Rect((825, 130, 100, 34))
+            delete_thingy_button = pygame.Rect((825, 75, 100, 34))
 
             for event in pygame.event.get():
                 if event.type == MOUSEBUTTONDOWN and event.button == 1:  # check for left mouse click
@@ -295,8 +305,8 @@ class DesignMode:
 
                     text = self.font.render(self.name, True, (50, 50, 50))
                     text2 = self.font.render(self.value, True, (50, 50, 50))
-                    self.screen.blit(text, (245, 255))
-                    self.screen.blit(text2, (245, 320))
+                    self.screen.blit(text, (124, 255))
+                    self.screen.blit(text2, (124, 320))
 
                     if finish_rect.collidepoint((mx, my)) and click:  # Guarda Name & Value
                         if self.pow:
@@ -347,6 +357,26 @@ class DesignMode:
                         click = False
                 else:
                     self.paintButtons(False, False)
+
+                if delete_button.collidepoint((mx, my)) and click:
+                    self.remove = True
+
+                if delete_thingy_button.collidepoint((mx, my)) and click:
+                    self.remove_thingy = True
+
+                if self.remove:
+                    for elements in self.list_lines_tuples:
+                        self.list_lines_tuples.remove(elements)
+                    for elements in self.list_lines_connections:
+                        self.list_lines_connections.remove(elements)
+                    self.remove = False
+
+                if self.remove_thingy:
+                    for elements in self.list_pow:
+                        self.list_pow.remove(elements)
+                    for elements in self.list_res:
+                        self.list_res.remove(elements)
+                    self.remove_thingy = False
 
                 for o in self.list_pow:  # Checks for collitions
                     if not (o.rect.collidepoint((mx, my)) and click_left):
