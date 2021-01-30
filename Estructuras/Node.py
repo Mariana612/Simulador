@@ -13,6 +13,12 @@ class Node:
 
     def addconnection(self, Node, Peso):
         if Node.name in self.Conections:
-            self.Conections[Node.name] = [self.Conections[Node.name], Peso]
+            if isinstance(self.Conections[Node.name],list):
+                newvalue=[Peso]
+                newvalue+=self.Conections[Node.name]
+                self.Conections[Node.name]=newvalue
+            else:
+                self.Conections[Node.name] = [self.Conections[Node.name], Peso]
+
         else:
             self.Conections[Node.name] = Peso

@@ -1,6 +1,5 @@
 from Estructuras import Node
 
-
 class Graph:
     def __init__(self):
         self._Nodes = []
@@ -15,7 +14,7 @@ class Graph:
                 continue
     def addnode(self, name, value):
         # Creación del nodo
-        NewNode = Node.Node(name, value)
+        NewNode = Node.Node(name,value)
         # Adición a la lista de nodos
         self._Nodes.append(NewNode)
         return NewNode
@@ -32,7 +31,7 @@ class Graph:
             elif i in Node1.Conections:
                 Fuse=self.searchnode(i)
                 Node1.Conections[i]=[Node1.Conections[i],Node2.Conections[i]]
-                self.QuickSort(Node1.Conections[i])
+                self.quicksort(Node1.Conections[i])
                 Fuse.Conections[Node1.name]=Node1.Conections[i]
                 Node2.eliminateConnection(Node2,self.searchnode(i))
             else:
@@ -47,6 +46,13 @@ class Graph:
         self.searchnode(Name1).addconnection(self.searchnode(Name2),peso)
         # Registrar conexión en el segundo nodo
         self.searchnode(Name2).addconnection(self.searchnode(Name1),peso)
+
+        chequeo=self.searchnode(Name1).Conections[Name2]
+
+        if isinstance(chequeo,list):
+            self.quicksort(self.searchnode(Name1).Conections[Name2])
+            self.quicksort(self.searchnode(Name2).Conections[Name1])
+
 
     def searchshortestpath(self, Name1, Name2):
         self.resetDijkstra(self._Nodes,True)
@@ -81,15 +87,15 @@ class Graph:
 
     #QuickSort de menor a mayor
 
-    def QuickSort(self,Lista):
-        self.QuickSortaux(Lista,0,len(Lista)-1)
+    def quicksort(self,Lista):
+        self.quicksortaux(Lista,0,len(Lista)-1)
 
-    def QuickSortaux(self,Lista,Low,High):
+    def quicksortaux(self,Lista,Low,High):
         if Low<High:
             index=self.Partition(Lista,Low,High)
 
-            self.QuickSortaux(Lista,Low,index-1)
-            self.QuickSortaux(Lista,index,High)
+            self.quicksortaux(Lista,Low,index-1)
+            self.quicksortaux(Lista,index,High)
 
     def Partition(self,Lista,Low,High):
         index=Low-1
@@ -116,11 +122,21 @@ class Graph:
                 adjacentNode=self.searchnode(key)
                 value=currentNode.Conections[key]
                 if (adjacentNode not in VisitedNodes):
-                    self.MinimumDistance(adjacentNode,value,currentNode,Short)
-                    UnvisitedNodes.append(adjacentNode)
+                    if isinstance(value,list):
+                        if Short:
+                            self.MinMaxDistance(adjacentNode,value[0],currentNode,Short)
+                            UnvisitedNodes.append(adjacentNode)
+                        else:
+                            self.MinMaxDistance(adjacentNode, value[len(value)-1], currentNode, Short)
+                            UnvisitedNodes.append(adjacentNode)
+
+                    else:
+                        self.MinMaxDistance(adjacentNode, value, currentNode, Short)
+                        UnvisitedNodes.append(adjacentNode)
+
             VisitedNodes.append(currentNode)
 
-    def MinimumDistance(self,evaluationNode,weight,sourceNode,Short):
+    def MinMaxDistance(self,evaluationNode,weight,sourceNode,Short):
         SourceDistance=sourceNode.Distance
         if Short:
             if (SourceDistance+weight<evaluationNode.Distance):
@@ -156,3 +172,23 @@ class Graph:
             else:
                 i.Distance=-float("inf")
                 i.path=[]
+
+Grafo=Graph()
+
+Grafo.addnode("A",32)
+Grafo.addnode("B",65)
+Grafo.addnode("C",90)
+Grafo.addnode("D",65)
+
+
+Grafo.makeconection("A","B",9)
+Grafo.makeconection("A","B",2)
+Grafo.makeconection("A","D",4)
+Grafo.makeconection("A","D",5)
+Grafo.makeconection("A","D",6)
+Grafo.makeconection("D","C",3)
+Grafo.makeconection("B","C",1)
+
+Grafo.searchlongestpath("A","C")
+print("Fin")
+
