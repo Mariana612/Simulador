@@ -79,13 +79,15 @@ class SimulateMode:
             for event in pygame.event.get():
                 if event.type == MOUSEBUTTONDOWN and event.button == 1:  # check for left mouse click
                     click = True
-                if event.type == MOUSEBUTTONUP:
+                elif event.type == MOUSEBUTTONUP:
                     click = False
                     firstClick = False
-                if event.type == QUIT or (event.type == KEYDOWN and event.key == K_ESCAPE):  # leave application
+                elif event.type == QUIT:  # leave application
                     on = False
                     pygame.quit()
                     sys.exit()
+                elif event.type == KEYDOWN and event.key == K_ESCAPE:
+                    on = False
 
             for i in self.dijkstraAnchorSquares:
                 if i.collidepoint((mx, my)) and click and not firstClick:

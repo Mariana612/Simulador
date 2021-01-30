@@ -570,7 +570,6 @@ class DesignMode:
                     if self.validCircuit:
                         click = False
                         SimulateMode(self.screen, self.clock, self.list_pow, self.list_res, self.list_lines_tuples, self.graph, self.list_lines_connections, self.list_nodes)
-                        on = False
 
 
             else:

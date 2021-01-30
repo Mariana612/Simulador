@@ -95,6 +95,10 @@ class Start:
                         running = False
                     if event.key == pygame.K_BACKSPACE:
                         filenameString = filenameString[:-1]
+                    elif event.key == pygame.K_RETURN:
+                        if len(filenameString) > 0:
+                            self.importCircuit(filenameString)
+                            running = False
                     elif self.fileFont.size(filenameString + event.unicode)[0] < 190: #[0] accesa el width ya que returna (w,h)
                         filenameString += event.unicode
                         filenameString = sanitize_filepath(filenameString)
