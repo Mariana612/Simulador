@@ -337,7 +337,6 @@ class DesignMode:
             delete_thingy_button = pygame.Rect((825, 75, 100, 34))
             export_button = pygame.Rect((825, 475, 100, 34))
 
-            click = False
             for event in pygame.event.get():
                 if event.type == MOUSEBUTTONDOWN and event.button == 1:  # check for left mouse click
                     click = True
