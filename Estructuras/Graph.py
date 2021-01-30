@@ -143,14 +143,14 @@ class Graph:
                 evaluationNode.Distance=SourceDistance+weight
                 Shortestpath=[]
                 Shortestpath+=sourceNode.path
-                Shortestpath.append(sourceNode)
+                Shortestpath.append((sourceNode,weight))
                 evaluationNode.path=Shortestpath
         else:
             if (SourceDistance+weight>evaluationNode.Distance):
                 evaluationNode.Distance=SourceDistance+weight
                 Shortestpath=[]
                 Shortestpath+=sourceNode.path
-                Shortestpath.append(sourceNode)
+                Shortestpath.append((sourceNode,weight))
                 evaluationNode.path=Shortestpath
     def LowestDistance(self,NodeList):
         LowestDistanceNode=None
