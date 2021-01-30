@@ -343,8 +343,6 @@ class DesignMode:
                                         pass
 
                     # Refresh GUI
-                    rectangle = pygame.draw.rect(self.screen, (243, 243, 243), (123, 255, 250, 25))
-                    rectangle = pygame.draw.rect(self.screen, (243, 243, 243), (123, 320, 250, 25))
 
                     text = self.font.render(self.name, True, (50, 50, 50))
                     text2 = self.font.render(self.value, True, (50, 50, 50))
@@ -509,7 +507,7 @@ class DesignMode:
                     self.checkCircuitValidity()
                     if self.validCircuit:
                         click = False
-                        SimulateMode(self.screen, self.clock, self.list_pow, self.list_res, self.list_lines_tuples, self.graph, self.list_lines_tuples, self.list_lines_connections, self.list_nodes)
+                        SimulateMode(self.screen, self.clock, self.list_pow, self.list_res, self.list_lines_tuples, self.graph, self.list_lines_connections, self.list_nodes)
                         on = False
 
 
@@ -769,4 +767,6 @@ class DesignMode:
                         node1 = node
                     elif resistance.anchorPoints[1].center == point:
                         node2 = node
-            self.graph.makeconection(node1, node2, randint(0, 10))
+            weight = randint(0, 10)
+            self.graph.makeconection(node1.name, node2.name, weight)
+            resistance.voltage = weight
