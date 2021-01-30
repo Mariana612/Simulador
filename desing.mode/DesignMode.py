@@ -837,7 +837,7 @@ class DesignMode:
 
         for power in self.list_pow:
             current = randint(0, 1000)
-            resistance.current = current
+            power.current = current
 
 
 

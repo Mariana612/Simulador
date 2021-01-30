@@ -8,6 +8,7 @@ class SimulateMode:
         self.screen = screen
         self.screen.fill([205, 200, 200])
         self.font = pygame.font.SysFont('timesnewroman', 20)
+        self.valuesFont = pygame.font.SysFont('timesnewroman', 14)
         self.clock = clock
         self.graph = graph
 
@@ -99,17 +100,48 @@ class SimulateMode:
                         break
             for res in self.list_res:
                 if res.rotated:
-                    rotatedRect = pygame.Rect(res.rect.x,res.rect.y,res.rect.height,res.rect.width)
-                    pygame.draw.rect(self.screen,(255,0,0),rotatedRect)
+                    rotatedRect = pygame.Rect(res.rect.x, res.rect.y, res.rect.height, res.rect.width)
+                    if rotatedRect.collidepoint((mx, my)):
+                        self.showValues(res, "Resistance")
                 else:
-                    pygame.draw.rect(self.screen,(255,0,0),res.rect)
+                    if res.rect.collidepoint((mx, my)):
+                        self.showValues(res, "Resistance")
             for pow in self.list_pow:
                 if pow.rotated:
                     rotatedRect = pygame.Rect(pow.rect.x, pow.rect.y, pow.rect.height, pow.rect.width)
-                    pygame.draw.rect(self.screen, (255, 0, 0), rotatedRect)
+                    if rotatedRect.collidepoint((mx, my)):
+                        self.showValues(pow, "Power")
                 else:
-                    pygame.draw.rect(self.screen, (255, 0, 0), pow.rect)
+                    if pow.rect.collidepoint((mx, my)):
+                        self.showValues(pow, "Power")
             pygame.display.flip()
+
+    def showValues(self, element, type):
+        GREY = (200, 200, 200)
+        if element.rotated:
+            elementRect = pygame.Rect(element.rect.x, element.rect.y, element.rect.height, element.rect.width)
+        else:
+            elementRect = element.rect
+        # pygame.draw.rect(self.screen, (255, 0, 0), elementRect)
+
+        if type == "Power":
+            infoRect = pygame.Rect(elementRect.x - 30, elementRect.y - 15, 110, 50)
+            pygame.draw.rect(self.screen, GREY, infoRect)
+            voltageText = self.valuesFont.render("Voltage: " + str(element.value) + "V", True, (0, 0, 0))
+            currentText = self.valuesFont.render("Current: " + str(element.current) + "mA", True, (0, 0, 0))
+            self.screen.blit(voltageText, (infoRect.x+5, infoRect.y+7))
+            self.screen.blit(currentText, (infoRect.x+5, infoRect.y+30))
+
+        elif type == "Resistance":
+            infoRect = pygame.Rect(elementRect.x - 45, elementRect.y - 50, 110, 50)
+            pygame.draw.rect(self.screen, GREY, infoRect)
+            voltageText = self.valuesFont.render("Voltage: " + str(element.voltage) + "V", True, (0, 0, 0))
+            currentText = self.valuesFont.render("Current: " + str(element.current) + "mA", True, (0, 0, 0))
+            self.screen.blit(voltageText, (infoRect.x + 5, infoRect.y + 7))
+            self.screen.blit(currentText, (infoRect.x + 5, infoRect.y + 30))
+        else:
+            print("Llamada errónea a showValues en SimulateMode, siendo llamado con un type incorrecto")
+        pass
 
     def setDijkstraAnchorPoints(self):
         for line in self.list_lines_tuples:
