@@ -61,8 +61,6 @@ class SimulateMode:
         for o in self.list_least_voltage_lines:
             pygame.draw.aaline(self.screen, (0, 187, 255), o[0], o[1])
 
-        pygame.display.flip()
-
     def initialCall(self):
 
         # Images
@@ -99,7 +97,18 @@ class SimulateMode:
                         self.drawDijkstraLines(self.pointA, self.pointB)
                     else:
                         break
-
+            for res in self.list_res:
+                if res.rotated:
+                    rotatedRect = pygame.Rect(res.rect.x,res.rect.y,res.rect.height,res.rect.width)
+                    pygame.draw.rect(self.screen,(255,0,0),rotatedRect)
+                else:
+                    pygame.draw.rect(self.screen,(255,0,0),res.rect)
+            for pow in self.list_pow:
+                if pow.rotated:
+                    rotatedRect = pygame.Rect(pow.rect.x, pow.rect.y, pow.rect.height, pow.rect.width)
+                    pygame.draw.rect(self.screen, (255, 0, 0), rotatedRect)
+                else:
+                pygame.draw.rect(self.screen, (255, 0, 0), pow.rect)
             pygame.display.flip()
 
     def setDijkstraAnchorPoints(self):
