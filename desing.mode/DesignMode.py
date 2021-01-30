@@ -36,9 +36,11 @@ class DesignMode:
                 self.list_pow.append(PowerNode(pow['x'],pow['y'],pow['width'],pow['height'],pow['name'],pow['value'],pow['rotated']))
             for res in circuitList[1]:
                 self.list_res.append(ResNode(res['x'],res['y'],res['width'],res ['height'],res['name'],res['value'],res['rotated']))
-            self.list_lines_tuples = circuitList[2]
-            self.list_lines_connections = circuitList[3]
+            self.list_lines_tuples = self.tuple_list(circuitList[2])
+            self.list_lines_connections = self.tuple_list(circuitList[3])
 
+            print(self.list_lines_tuples)
+            print(self.list_lines_connections)
 
         # Flags
         self.writing = False
@@ -56,6 +58,17 @@ class DesignMode:
 
         pygame.display.set_caption('Simulador')
         self.designMenu()
+
+    def tuple_list(self, listvar):
+        tupledList = []
+        for element in listvar:
+            if isinstance(element, list):
+                newElement = self.tuple_list(element)
+                tupledList.append(tuple(newElement))
+            else:
+                tupledList.append(element)
+        return tupledList
+
 
     def paintButtons(self, touched1, touched2):  # Changes colors of buttons
         # Images

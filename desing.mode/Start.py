@@ -63,8 +63,12 @@ class Start:
 
         path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'circuits')) #agarra el path de circuits
         os.makedirs(path, exist_ok=True) #crea el directorio de circuits si no existe
-        with open(os.path.join(path,filename+'.txt'), 'r') as f: #hay que acer el path.join para que cree un archivo y no un directorio
-            circuitList = json.load(f)
+        try:
+            with open(os.path.join(path,filename+'.txt'), 'r') as f: #hay que acer el path.join para que cree un archivo y no un directorio
+                circuitList = json.load(f)
+        except:
+            print("ERROR: No se pudo abrir el archivo especificado")
+            return
 
         DesignMode(self.screen, self.clock, circuitList)
 
