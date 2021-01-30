@@ -75,8 +75,8 @@ class Start:
         LIGHTBLUE = (154,169,182)
         WHITE = (255,255,255)
         ORANGE = (253,160,40)
-        cancel_button = pygame.Rect((280, 350, 100, 40))
-        accept_button = pygame.Rect((450, 350, 100, 40))
+        cancel_button = pygame.Rect((290, 410, 120, 50))
+        accept_button = pygame.Rect((590, 410, 120, 50))
 
 
         while running:
@@ -106,8 +106,8 @@ class Start:
                 running=False
 
             if running:  # tal vez ocupe agregar un blit al fondo
-                pygame.draw.rect(self.screen, LIGHTBLUE,(250,194,330,213))
-                pygame.draw.rect(self.screen, WHITE, (300, 290, 200, 30))
+                pygame.draw.rect(self.screen, LIGHTBLUE,(250,194,500,300)) #main box
+                pygame.draw.rect(self.screen, WHITE, (400, 290, 200, 30)) #text box
                 text = self.font.render("Insert import filename:", True, WHITE) #insert import...
                 self.screen.blit(text, [323, 230])
                 text = self.fileFont.render(".txt", True, (0,0,0)) #.txt
@@ -118,9 +118,9 @@ class Start:
                 pygame.draw.rect(self.screen, ORANGE, cancel_button)
                 pygame.draw.rect(self.screen, ORANGE, accept_button)
                 text = self.font.render("Cancel", True, WHITE) #cancel
-                self.screen.blit(text, [300, 359])
+                self.screen.blit(text, [300, 415])
                 text = self.font.render("Accept", True, WHITE) #accept
-                self.screen.blit(text, [472, 359])
+                self.screen.blit(text, [600, 415])
                 pygame.display.flip()
                 self.clock.tick(60)
 
