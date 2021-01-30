@@ -2,11 +2,11 @@ import pygame
 
 
 class PowerNode(object):
-    def __init__(self, x, y, width, height):
+    def __init__(self, x, y, width, height, rotated=False):
         self.rect = pygame.Rect((x, y, width, height))
         self.name = ""
         self.value = ""
-        self.rotated = False
+        self.rotated = rotated
         self.sum = 0
         self.anchorPoints = [pygame.Rect((self.rect.center[0] - 55, self.rect.center[1] - 10, 10, 10)),
                              pygame.Rect((self.rect.center[0] + 55, self.rect.center[1] - 10, 10, 10))]
@@ -43,4 +43,4 @@ class PowerNode(object):
                                  pygame.Rect((self.rect.center[0] - 5, self.rect.center[1] + 50, 10, 10))]
 
     def toDict(self):
-        return {"x": self.rect.x,"y": self.rect.y,"width": self.rect.width,"height": self.rect.height}
+        return {"x": self.rect.x, "y": self.rect.y, "width": self.rect.width, "height": self.rect.height, "rotated": self.rotated}

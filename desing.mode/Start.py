@@ -60,22 +60,13 @@ class Start:
 
     def importCircuit(self,filename):
         import json, os
-        print('HOLAAAA')
-        return
-        powerList=[]
-        resList=[]
-        for pow in self.list_pow:
-            powerList.append(pow.toDict())
-        for res in self.list_res:
-            resList.append(res.toDict())
-
-        circuitList = [powerList, resList, self.list_lines_tuples, self.list_lines_connections]
-        #circuitJSON = json.dumps(circuitList)
 
         path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'circuits')) #agarra el path de circuits
         os.makedirs(path, exist_ok=True) #crea el directorio de circuits si no existe
-        with open(os.path.join(path,filename+'.txt'), 'w', encoding='utf-8') as f: #hay que acer el path.join para que cree un archivo y no un directorio
-            json.dump(circuitList, f, ensure_ascii=False, indent=4)
+        with open(os.path.join(path,filename+'.txt'), 'r') as f: #hay que acer el path.join para que cree un archivo y no un directorio
+            circuitList = json.load(f)
+
+        DesignMode(self.screen, self.clock, circuitList)
 
     def importMenu(self):
         from pathvalidate import sanitize_filepath

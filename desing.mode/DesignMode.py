@@ -9,7 +9,7 @@ from random import *
 
 
 class DesignMode:
-    def __init__(self, screen, clock):
+    def __init__(self, screen, clock, circuitList = None):
         # Screen
         self.screen = screen
         self.screen.fill([243, 243, 243])
@@ -30,6 +30,15 @@ class DesignMode:
         self.graph = None
         self.lastLookedAtNode = None
         self.nodeNameCounter = 0
+
+        if circuitList != None: #se importa un circuito
+            for pow in circuitList[0]:
+                self.list_pow.append(PowerNode(pow['x'],pow['y'],pow['width'],pow['height'],pow['rotated']))
+            for res in circuitList[1]:
+                self.list_res.append(ResNode(res['x'],res['y'],res['width'],res ['height'],res['rotated']))
+            self.list_lines_tuples = circuitList[2]
+            self.list_lines_connections = circuitList[3]
+
 
         # Flags
         self.writing = False
