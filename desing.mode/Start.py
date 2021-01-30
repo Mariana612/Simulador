@@ -13,6 +13,7 @@ class Start:
         self.clock = pygame.time.Clock()
         pygame.display.set_caption('Simulador')
         self.font = pygame.font.SysFont('timesnewroman', 36)
+        self.fileFont = pygame.font.SysFont('timesnewroman', 20)
 
         self.initialCall()
 
@@ -55,7 +56,75 @@ class Start:
                 DesignMode(self.screen, self.clock)
 
             if import_rect.collidepoint((mx, my)) and click:
-                pass
+                self.importMenu()
+
+    def importCircuit(self,filename):
+        import json, os
+
+        path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'circuits')) #agarra el path de circuits
+        os.makedirs(path, exist_ok=True) #crea el directorio de circuits si no existe
+        with open(os.path.join(path,filename+'.txt'), 'r') as f: #hay que acer el path.join para que cree un archivo y no un directorio
+            circuitList = json.load(f)
+
+        DesignMode(self.screen, self.clock, circuitList)
+
+    def importMenu(self):
+        from pathvalidate import sanitize_filepath
+        running = True
+        filenameString = ""
+        LIGHTBLUE = (154,169,182)
+        WHITE = (255,255,255)
+        ORANGE = (253,160,40)
+        cancel_button = pygame.Rect((290, 410, 120, 50))
+        accept_button = pygame.Rect((590, 410, 120, 50))
+
+
+        while running:
+            click = False
+            for event in pygame.event.get():  # check events here
+                if event.type == QUIT:  # leave application
+                    running = False
+                    pygame.quit()
+                    sys.exit()
+                elif event.type == KEYDOWN:
+                    if event.key == K_ESCAPE:
+                        running = False
+                    if event.key == pygame.K_BACKSPACE:
+                        filenameString = filenameString[:-1]
+                    elif self.fileFont.size(filenameString + event.unicode)[0] < 190: #[0] accesa el width ya que returna (w,h)
+                        filenameString += event.unicode
+                        filenameString = sanitize_filepath(filenameString)
+                elif event.type == MOUSEBUTTONDOWN and event.button == 1:  # check for left mouse click
+                    click = True
+
+            mx, my = pygame.mouse.get_pos()
+            if accept_button.collidepoint((mx, my)) and click:
+                if len(filenameString) > 0:
+                    self.importCircuit(filenameString)
+                    running = False
+            elif cancel_button.collidepoint((mx, my)) and click:
+                running=False
+
+            if running:  # tal vez ocupe agregar un blit al fondo
+                pygame.draw.rect(self.screen, LIGHTBLUE,(250,194,500,300)) #main box
+                pygame.draw.rect(self.screen, WHITE, (400, 290, 200, 30)) #text box
+                text = self.font.render("Insert import filename:", True, WHITE) #insert import...
+                self.screen.blit(text, [323, 230])
+                text = self.fileFont.render(".txt", True, (0,0,0)) #.txt
+                self.screen.blit(text, [505, 295])
+                text = self.fileFont.render(filenameString, True, (0,0,0)) #nombre
+                self.screen.blit(text, [305, 295])
+                #botones
+                pygame.draw.rect(self.screen, ORANGE, cancel_button)
+                pygame.draw.rect(self.screen, ORANGE, accept_button)
+                text = self.font.render("Cancel", True, WHITE) #cancel
+                self.screen.blit(text, [300, 415])
+                text = self.font.render("Accept", True, WHITE) #accept
+                self.screen.blit(text, [600, 415])
+                pygame.display.flip()
+                self.clock.tick(60)
+
+        return
 
 
 start = Start()
