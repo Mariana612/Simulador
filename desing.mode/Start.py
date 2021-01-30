@@ -107,13 +107,13 @@ class Start:
 
             if running:  # tal vez ocupe agregar un blit al fondo
                 pygame.draw.rect(self.screen, LIGHTBLUE,(250,194,500,300)) #main box
-                pygame.draw.rect(self.screen, WHITE, (400, 290, 200, 30)) #text box
+                pygame.draw.rect(self.screen, WHITE, (400, 330, 200, 30)) #text box
                 text = self.font.render("Insert import filename:", True, WHITE) #insert import...
                 self.screen.blit(text, [323, 230])
                 text = self.fileFont.render(".txt", True, (0,0,0)) #.txt
-                self.screen.blit(text, [505, 295])
+                self.screen.blit(text, [605, 335])
                 text = self.fileFont.render(filenameString, True, (0,0,0)) #nombre
-                self.screen.blit(text, [305, 295])
+                self.screen.blit(text, [405, 335])
                 #botones
                 pygame.draw.rect(self.screen, ORANGE, cancel_button)
                 pygame.draw.rect(self.screen, ORANGE, accept_button)
