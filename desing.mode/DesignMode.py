@@ -393,7 +393,7 @@ class DesignMode:
 
                         if self.value_entry:  # Change Value
                             if event.key == pygame.K_BACKSPACE:
-                                self.name = self.value[:-1]
+                                self.value = self.value[:-1]
                             else:
                                 if len(self.value) < 18:
                                     try:
@@ -403,7 +403,8 @@ class DesignMode:
                                         pass
 
                     # Refresh GUI
-
+                    pygame.draw.rect(self.screen,(255,255,255),name_Rect)
+                    pygame.draw.rect(self.screen, (255, 255, 255), value_Rect)
                     text = self.font.render(self.name, True, (50, 50, 50))
                     text2 = self.font.render(self.value, True, (50, 50, 50))
                     self.screen.blit(text, (124, 255))

@@ -108,7 +108,7 @@ class SimulateMode:
                     rotatedRect = pygame.Rect(pow.rect.x, pow.rect.y, pow.rect.height, pow.rect.width)
                     pygame.draw.rect(self.screen, (255, 0, 0), rotatedRect)
                 else:
-                pygame.draw.rect(self.screen, (255, 0, 0), pow.rect)
+                    pygame.draw.rect(self.screen, (255, 0, 0), pow.rect)
             pygame.display.flip()
 
     def setDijkstraAnchorPoints(self):
