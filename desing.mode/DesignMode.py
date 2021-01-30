@@ -828,6 +828,15 @@ class DesignMode:
                         node1 = node
                     elif resistance.anchorPoints[1].center == point:
                         node2 = node
-            weight = randint(0, 10)
-            self.graph.makeconection(node1.name, node2.name, weight)
-            resistance.voltage = weight
+            voltage = randint(1, 1000)/100
+            self.graph.makeconection(node1.name, node2.name, voltage)
+            resistance.voltage = voltage
+            current = randint(0,1000)
+            resistance.current = current
+
+        for power in self.list_pow:
+            current = randint(0, 1000)
+            resistance.current = current
+
+
+

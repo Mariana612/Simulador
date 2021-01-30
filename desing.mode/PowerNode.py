@@ -10,6 +10,7 @@ class PowerNode(object):
         self.sum = 0
         self.anchorPoints = [pygame.Rect((self.rect.center[0] - 55, self.rect.center[1] - 10, 10, 10)),
                              pygame.Rect((self.rect.center[0] + 55, self.rect.center[1] - 10, 10, 10))]
+        self.current = None
 
     # def recurisve(self,num):
     def checkPlacement(self):
