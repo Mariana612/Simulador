@@ -36,9 +36,11 @@ class DesignMode:
                 self.list_pow.append(PowerNode(pow['x'],pow['y'],pow['width'],pow['height'],pow['name'],pow['value'],pow['rotated']))
             for res in circuitList[1]:
                 self.list_res.append(ResNode(res['x'],res['y'],res['width'],res ['height'],res['name'],res['value'],res['rotated']))
-            self.list_lines_tuples = circuitList[2]
-            self.list_lines_connections = circuitList[3]
+            self.list_lines_tuples = self.tuple_list(circuitList[2])
+            self.list_lines_connections = self.tuple_list(circuitList[3])
 
+            print(self.list_lines_tuples)
+            print(self.list_lines_connections)
 
         # Flags
         self.writing = False
@@ -56,6 +58,17 @@ class DesignMode:
 
         pygame.display.set_caption('Simulador')
         self.designMenu()
+
+    def tuple_list(self, listvar):
+        tupledList = []
+        for element in listvar:
+            if isinstance(element, list):
+                newElement = self.tuple_list(element)
+                tupledList.append(tuple(newElement))
+            else:
+                tupledList.append(element)
+        return tupledList
+
 
     def paintButtons(self, touched1, touched2):  # Changes colors of buttons
         # Images
@@ -380,7 +393,7 @@ class DesignMode:
 
                         if self.value_entry:  # Change Value
                             if event.key == pygame.K_BACKSPACE:
-                                self.name = self.value[:-1]
+                                self.value = self.value[:-1]
                             else:
                                 if len(self.value) < 18:
                                     try:
@@ -390,7 +403,8 @@ class DesignMode:
                                         pass
 
                     # Refresh GUI
-
+                    pygame.draw.rect(self.screen,(255,255,255),name_Rect)
+                    pygame.draw.rect(self.screen, (255, 255, 255), value_Rect)
                     text = self.font.render(self.name, True, (50, 50, 50))
                     text2 = self.font.render(self.value, True, (50, 50, 50))
                     self.screen.blit(text, (124, 255))
@@ -557,7 +571,6 @@ class DesignMode:
                     if self.validCircuit:
                         click = False
                         SimulateMode(self.screen, self.clock, self.list_pow, self.list_res, self.list_lines_tuples, self.graph, self.list_lines_connections, self.list_nodes)
-                        on = False
 
 
             else:
@@ -816,6 +829,15 @@ class DesignMode:
                         node1 = node
                     elif resistance.anchorPoints[1].center == point:
                         node2 = node
-            weight = randint(0, 10)
-            self.graph.makeconection(node1.name, node2.name, weight)
-            resistance.voltage = weight
+            voltage = randint(1, 1000)/100
+            self.graph.makeconection(node1.name, node2.name, voltage)
+            resistance.voltage = voltage
+            current = randint(0,1000)
+            resistance.current = current
+
+        for power in self.list_pow:
+            current = randint(0, 1000)
+            power.current = current
+
+
+

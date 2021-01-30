@@ -1,6 +1,5 @@
 from Estructuras import Node
 
-
 class Graph:
     def __init__(self):
         self._Nodes = []
@@ -15,7 +14,7 @@ class Graph:
                 continue
     def addnode(self, name, value):
         # Creación del nodo
-        NewNode = Node.Node(name, value)
+        NewNode = Node.Node(name,value)
         # Adición a la lista de nodos
         self._Nodes.append(NewNode)
         return NewNode
@@ -32,7 +31,7 @@ class Graph:
             elif i in Node1.Conections:
                 Fuse=self.searchnode(i)
                 Node1.Conections[i]=[Node1.Conections[i],Node2.Conections[i]]
-                self.QuickSort(Node1.Conections[i])
+                self.quicksort(Node1.Conections[i])
                 Fuse.Conections[Node1.name]=Node1.Conections[i]
                 Node2.eliminateConnection(Node2,self.searchnode(i))
             else:
@@ -48,6 +47,13 @@ class Graph:
         # Registrar conexión en el segundo nodo
         self.searchnode(Name2).addconnection(self.searchnode(Name1),peso)
 
+        chequeo=self.searchnode(Name1).Conections[Name2]
+
+        if isinstance(chequeo,list):
+            self.quicksort(self.searchnode(Name1).Conections[Name2])
+            self.quicksort(self.searchnode(Name2).Conections[Name1])
+
+
     def searchshortestpath(self, Name1, Name2):
         self.resetDijkstra(self._Nodes,True)
         Node1 = self.searchnode(Name1)
@@ -60,7 +66,6 @@ class Graph:
         Node2 = self.searchnode(Name2)
         self.Dijkstra(Node1,False)
         return Node2.path
-
 
     #Funciones del algoritmo de Dijkstra
         #Funciones para corto
@@ -76,25 +81,35 @@ class Graph:
                 adjacentNode=self.searchnode(key)
                 value=currentNode.Conections[key]
                 if (adjacentNode not in VisitedNodes):
-                    self.MinimumDistance(adjacentNode,value,currentNode,Short)
-                    UnvisitedNodes.append(adjacentNode)
+                    if isinstance(value,list):
+                        if Short:
+                            self.MinMaxDistance(adjacentNode,value[0],currentNode,Short)
+                            UnvisitedNodes.append(adjacentNode)
+                        else:
+                            self.MinMaxDistance(adjacentNode, value[len(value)-1], currentNode, Short)
+                            UnvisitedNodes.append(adjacentNode)
+
+                    else:
+                        self.MinMaxDistance(adjacentNode, value, currentNode, Short)
+                        UnvisitedNodes.append(adjacentNode)
+
             VisitedNodes.append(currentNode)
 
-    def MinimumDistance(self,evaluationNode,weight,sourceNode,Short):
+    def MinMaxDistance(self,evaluationNode,weight,sourceNode,Short):
         SourceDistance=sourceNode.Distance
         if Short:
             if (SourceDistance+weight<evaluationNode.Distance):
                 evaluationNode.Distance=SourceDistance+weight
                 Shortestpath=[]
                 Shortestpath+=sourceNode.path
-                Shortestpath.append(sourceNode)
+                Shortestpath.append((sourceNode,weight))
                 evaluationNode.path=Shortestpath
         else:
             if (SourceDistance+weight>evaluationNode.Distance):
                 evaluationNode.Distance=SourceDistance+weight
                 Shortestpath=[]
                 Shortestpath+=sourceNode.path
-                Shortestpath.append(sourceNode)
+                Shortestpath.append((sourceNode,weight))
                 evaluationNode.path=Shortestpath
     def LowestDistance(self,NodeList):
         LowestDistanceNode=None
@@ -116,3 +131,22 @@ class Graph:
             else:
                 i.Distance=-float("inf")
                 i.path=[]
+
+Grafo=Graph()
+
+Grafo.addnode("A",32)
+Grafo.addnode("B",65)
+Grafo.addnode("C",90)
+Grafo.addnode("D",65)
+
+
+Grafo.makeconection("A","B",9)
+Grafo.makeconection("A","B",2)
+Grafo.makeconection("A","D",4)
+Grafo.makeconection("A","D",5)
+Grafo.makeconection("A","D",6)
+Grafo.makeconection("D","C",3)
+Grafo.makeconection("B","C",1)
+
+Grafo.searchlongestpath("A","C")
+print("Fin")

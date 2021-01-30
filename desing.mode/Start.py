@@ -63,8 +63,12 @@ class Start:
 
         path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'circuits')) #agarra el path de circuits
         os.makedirs(path, exist_ok=True) #crea el directorio de circuits si no existe
-        with open(os.path.join(path,filename+'.txt'), 'r') as f: #hay que acer el path.join para que cree un archivo y no un directorio
-            circuitList = json.load(f)
+        try:
+            with open(os.path.join(path,filename+'.txt'), 'r') as f: #hay que acer el path.join para que cree un archivo y no un directorio
+                circuitList = json.load(f)
+        except:
+            print("ERROR: No se pudo abrir el archivo especificado")
+            return
 
         DesignMode(self.screen, self.clock, circuitList)
 
@@ -91,6 +95,10 @@ class Start:
                         running = False
                     if event.key == pygame.K_BACKSPACE:
                         filenameString = filenameString[:-1]
+                    elif event.key == pygame.K_RETURN:
+                        if len(filenameString) > 0:
+                            self.importCircuit(filenameString)
+                            running = False
                     elif self.fileFont.size(filenameString + event.unicode)[0] < 190: #[0] accesa el width ya que returna (w,h)
                         filenameString += event.unicode
                         filenameString = sanitize_filepath(filenameString)

@@ -10,6 +10,7 @@ class ResNode(object):
         self.anchorPoints = [pygame.Rect((self.rect.center[0] - 5, self.rect.center[1] - 60, 10, 10)),
                              pygame.Rect((self.rect.center[0] - 5, self.rect.center[1] + 50, 10, 10))]
         self.voltage = None
+        self.current = None
 
     def checkPlacementRes(self):
         # places y
