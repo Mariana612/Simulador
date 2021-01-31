@@ -30,6 +30,7 @@ class DesignMode:
         self.graph = None
         self.lastLookedAtNode = None
         self.nodeNameCounter = 0
+        self.object = None
 
         if circuitList != None: #se importa un circuito
             for pow in circuitList[0]:
@@ -55,6 +56,7 @@ class DesignMode:
         self.validCircuit = False
         self.remove = False
         self.remove_thingy = False
+        self.modify = False
 
         pygame.display.set_caption('Simulador')
         self.designMenu()
@@ -177,6 +179,8 @@ class DesignMode:
 
         self.name = element.name
         self.value = element.value
+        self.object = element
+        self.modify = True
         self.screen.blit(text_surf, (123, 224))
         rectangle = pygame.draw.rect(self.screen, (243, 243, 243), (123, 255, 250, 25))
         self.screen.blit(text_surf2, (123, 290))
@@ -337,7 +341,6 @@ class DesignMode:
 
         return
 
-
     def designMenu(self):  # Design Menu
         # Flags
         on = True
@@ -411,14 +414,20 @@ class DesignMode:
                     self.screen.blit(text2, (124, 320))
 
                     if finish_rect.collidepoint((mx, my)) and click:  # Guarda Name & Value
-                        if self.pow:
-                            self.list_pow[-1].name = self.name
-                            self.list_pow[-1].value = self.value
+                        if self.modify:
+                            self.object.name = self.name
+                            self.object.value = self.value
                         else:
-                            self.list_res[-1].name = self.name
-                            self.list_res[-1].value = self.value
+                            if self.pow:
+                                self.list_pow[-1].name = self.name
+                                self.list_pow[-1].value = self.value
+                            else:
+                                self.list_res[-1].name = self.name
+                                self.list_res[-1].value = self.value
+
                         self.name = ""
                         self.value = ""
+                        self.modify = False
                         self.writing = False
 
                     if blue_rect_l.collidepoint((mx, my)) and click:
