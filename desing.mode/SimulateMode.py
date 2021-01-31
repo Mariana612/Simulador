@@ -123,8 +123,6 @@ class SimulateMode:
                 self.screen.blit(text, [250, y])
                 y += 25
 
-        pygame.display.flip()
-
     def initialCall(self):
         """
         Dibujador llamada inicial
