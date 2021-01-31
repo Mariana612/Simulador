@@ -9,12 +9,12 @@ pygame.init()
 class Start:
     """
 Clase de inicial
-Autor:
+Autor: Mariana Navarro
     """
     def __init__(self):
         """
 Incializador de la clasr
-Autor:
+Autor:Mariana Navarro
         """
         self.screen = pygame.display.set_mode((1000, 600))
         self.screen.fill([243, 243, 243])
@@ -28,7 +28,7 @@ Autor:
     def initialCall(self):
         """
 Llamada inicial
-Autor:
+Autor:Mariana Navarro
                 """
         # Images
         logo = pygame.image.load("Imgs\\logo.png").convert_alpha()

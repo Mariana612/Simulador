@@ -126,7 +126,7 @@ class SimulateMode:
     def initialCall(self):
         """
         Dibujador llamada inicial
-        Autor: Mariana Navarro
+        Autor: Mariana Navarro & Jose Retana
         """
 
         # Images

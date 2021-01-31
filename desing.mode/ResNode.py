@@ -9,7 +9,7 @@ Autor: Mariana Navarro
     def __init__(self, x, y, width, height, name="", value="", rotated=False):
         """
 Inicializador de la clase
-Autor:
+Autor: Mariana Navarro
 Entradas: posición x, posición y, ancho, alto, nombre, valor, rotado o no
         """
         self.rect = pygame.Rect((x, y, width, height))
@@ -24,7 +24,7 @@ Entradas: posición x, posición y, ancho, alto, nombre, valor, rotado o no
     def checkPlacementRes(self):
         """
 Función que revisa el placement del nodo
-Autor:
+Autor: Mariana Navarro
         """
         # places y
         # places y
@@ -48,7 +48,7 @@ Autor:
     def setxyRes(self, mx, my):
         """
 Función setter de las posiciones x y y
-Autor:
+Autor: Mariana Navarro
         """
         self.rect.x = mx
         self.rect.y = my
@@ -56,7 +56,7 @@ Autor:
     def setAnchorPoints(self):
         """
 Función setter de los anchor points
-Autor:
+Autor: Jose Retana
         """
         if not self.rotated:
             self.anchorPoints = [pygame.Rect((self.rect.center[0] - 35, self.rect.center[1] - 9, 10, 10)),

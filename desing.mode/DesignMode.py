@@ -11,12 +11,12 @@ from random import *
 class DesignMode:
     """
     Clase que modela el modo diseño
-    Autor:
+    Autor: Mariana  Navarro
     """
     def __init__(self, screen, clock, circuitList = None):
         """
 Inicializador de la clase
-Autor:
+Autor: Mariana Navarro
 Entrada:Main window, main clock
         """
         # Screen
@@ -90,7 +90,7 @@ Salida:Lista de tuplas
     def paintButtons(self, touched1, touched2):  # Changes colors of buttons
         """
         Función para cambiar los colores de los botones
-        Autor:
+        Autor: Mariana Navarro
         Entrada:Lista de Nodos, booleano que indica si buscamos el mayor o menor peso
         Salida:Nodo de Mayor/Menor distancia
         """
@@ -123,7 +123,7 @@ Salida:Lista de tuplas
     def createElement(self, width, height, power):  # Creates new element
         """
 Función para crear un elemento en el modo diseño
-Autor:
+Autor: Mariana Navarro
 Entrada: Ancho del elemento, altura del elemento y booleano de si se crea una resistencia o fuente
         """
         if power:  # Crea fuente de Poder
@@ -139,7 +139,7 @@ Entrada: Ancho del elemento, altura del elemento y booleano de si se crea una re
     def changeValues(self, element):  # GUI thingy to change Name and Value
         """
 Función que permite cambiar al usuario el nombre y valor de un componente añadido (GUI part)
-Autor:
+Autor: Mariana Navarro
 Entrada:elemento a cambiar
         """
         # Images
@@ -183,7 +183,7 @@ Entrada:elemento a cambiar
     def changeValues2(self, element, pow):  # GUI thingy to change Name and Value
         """
 Función que permite cambiar al usuario el nombre y valor de un componente añadido (actual change)
-Autor:
+Autor: Mariana Navarro
 Entrada:elementp a cambiar, booleano para saber si es una fuente o resistencia
         """
         # Images
@@ -233,7 +233,7 @@ Entrada:elementp a cambiar, booleano para saber si es una fuente o resistencia
     def drawElements(self, mx, my, click):  # Refresh elements in screen
         """
 Dibujador de todos los elementos
-Autor:
+Autor: Mariana Navarro
 Entrada: posición x del mouse, posición y del mouse, click
         """
         # Images
@@ -394,7 +394,7 @@ Autor: Ignacio Vargas
     def designMenu(self):  # Design Menu
         """
 Función que contiene el menu de diseño
-Autor:
+Autor: Mariana Navarro
         """
         # Flags
         on = True
