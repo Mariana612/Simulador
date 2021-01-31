@@ -116,7 +116,7 @@ class Graph:
         VisitedNodes=[]
         UnvisitedNodes=[Node1]
         while len(UnvisitedNodes)!=0:
-            currentNode=self.LowestDistance(UnvisitedNodes)
+            currentNode=self.LowBigDistance(UnvisitedNodes,Short)
             UnvisitedNodes.remove(currentNode)
             for key in currentNode.Conections.keys():
                 adjacentNode=self.searchnode(key)
@@ -152,17 +152,25 @@ class Graph:
                 Shortestpath+=sourceNode.path
                 Shortestpath.append((sourceNode,weight))
                 evaluationNode.path=Shortestpath
-    def LowestDistance(self,NodeList):
-        LowestDistanceNode=None
-        lowestdistance=float("inf")
-        for Node in NodeList:
-            nodeDistance=Node.Distance
-            if nodeDistance<lowestdistance:
-                lowestdistance=nodeDistance
-                LowestDistanceNode=Node
-        return LowestDistanceNode
-        #Funciones para largo
-
+    def LowBigDistance(self,NodeList,Short):
+        if Short:
+            LowestDistanceNode=None
+            lowestdistance=float("inf")
+            for Node in NodeList:
+                nodeDistance=Node.Distance
+                if nodeDistance<lowestdistance:
+                    lowestdistance=nodeDistance
+                    LowestDistanceNode=Node
+            return LowestDistanceNode
+        else:
+            BigestDistanceNode=None
+            Bigestdistance=-float("inf")
+            for Node in NodeList:
+                nodeDistance=Node.Distance
+                if nodeDistance>Bigestdistance:
+                    Bigestdistance=nodeDistance
+                    BigestDistanceNode=Node
+            return BigestDistanceNode
 
     def resetDijkstra(self,Lista,Short):
         for i in Lista:
@@ -178,16 +186,11 @@ Grafo=Graph()
 Grafo.addnode("A",32)
 Grafo.addnode("B",65)
 Grafo.addnode("C",90)
-Grafo.addnode("D",65)
 
+Grafo.makeconection("A","B",7.37)
+Grafo.makeconection("A","C",2.52)
+Grafo.makeconection("B","C",5.99)
 
-Grafo.makeconection("A","B",9)
-Grafo.makeconection("A","B",2)
-Grafo.makeconection("A","D",4)
-Grafo.makeconection("A","D",5)
-Grafo.makeconection("A","D",6)
-Grafo.makeconection("D","C",3)
-Grafo.makeconection("B","C",1)
 
 Grafo.searchlongestpath("A","C")
 print("Fin")
