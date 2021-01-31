@@ -7,7 +7,15 @@ pygame.init()
 
 
 class Start:
+    """
+Clase de inicial
+Autor:
+    """
     def __init__(self):
+        """
+Incializador de la clasr
+Autor:
+        """
         self.screen = pygame.display.set_mode((1000, 600))
         self.screen.fill([243, 243, 243])
         self.clock = pygame.time.Clock()
@@ -18,7 +26,10 @@ class Start:
         self.initialCall()
 
     def initialCall(self):
-
+        """
+Llamada inicial
+Autor:
+                """
         # Images
         logo = pygame.image.load("Imgs\\logo.png").convert_alpha()
         bg = pygame.image.load("Imgs\\bg.png").convert_alpha()
@@ -59,6 +70,11 @@ class Start:
                 self.importMenu()
 
     def importCircuit(self,filename):
+        """
+Función para la importación de un circuito
+Autor: Ignacio Vargas
+Entrada: Nombre del archivo
+        """
         import json, os
 
         path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'circuits')) #agarra el path de circuits
@@ -73,6 +89,10 @@ class Start:
         DesignMode(self.screen, self.clock, circuitList)
 
     def importMenu(self):
+        """
+Función que contiene el menú de importación
+Autor: Ignacio Vargas
+        """
         from pathvalidate import sanitize_filepath
         running = True
         filenameString = ""

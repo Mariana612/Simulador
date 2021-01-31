@@ -2,7 +2,16 @@ import pygame
 
 
 class PowerNode(object):
+    """
+Clase que representa al nodo de fuente
+Autor: Mariana Navarro
+    """
     def __init__(self, x, y, width, height, name="", value="", rotated=False):
+        """
+Inicializador de la clase
+Autor:
+Entradas: posición x, posición y, ancho, altura,nombre, valor, rotación
+        """
         self.rect = pygame.Rect((x, y, width, height))
         self.name = name
         self.value = value
@@ -14,6 +23,10 @@ class PowerNode(object):
 
     # def recurisve(self,num):
     def checkPlacement(self):
+        """
+Función que revisa el placement del nodo
+Autor:
+        """
         # places y
         num = 96
         num_x = 96
@@ -32,10 +45,18 @@ class PowerNode(object):
         self.setxy(num_x, self.rect.y)
 
     def setxy(self, mx, my):
+        """
+Función setter de las posiciones x y y
+Autor:
+        """
         self.rect.x = mx
         self.rect.y = my
 
     def setAnchorPoints(self):
+        """
+Función setter de los anchor points
+Autor:
+        """
         if self.rotated:
             self.anchorPoints = [pygame.Rect((self.rect.center[0] - 55, self.rect.center[1] - 10, 10, 10)),
                                  pygame.Rect((self.rect.center[0] + 55, self.rect.center[1] - 10, 10, 10))]
@@ -44,4 +65,9 @@ class PowerNode(object):
                                  pygame.Rect((self.rect.center[0] - 5, self.rect.center[1] + 50, 10, 10))]
 
     def toDict(self):
+        """
+Función getter de toda la info de la clase
+Autor:
+Salida: Diccionario con el nombre de la variable y su valor
+        """
         return {"x": self.rect.x, "y": self.rect.y, "width": self.rect.width, "height": self.rect.height, "name": self.name, "value": self.value, "rotated": self.rotated}

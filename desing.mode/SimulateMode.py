@@ -4,7 +4,16 @@ import sys
 
 
 class SimulateMode:
+    """
+Clase del modo simular
+Autor:
+    """
     def __init__(self, screen, clock, list_pow, list_res, list_lines_tuples, graph, list_lines_connections, list_nodes):
+        """
+        Inicializador de la clase
+        Autor:
+        Entrada:Main window, main clock,Lista fuentes, Lista resistencias, Tupla lineas, grafo, lista conexiones lineas, lista nodos
+        """
         self.screen = screen
         self.screen.fill([205, 200, 200])
         self.font = pygame.font.SysFont('timesnewroman', 20)
@@ -38,6 +47,11 @@ class SimulateMode:
         self.initialCall()
 
     def drawElements(self, mx, my, click):  # Refresh elements in screen
+        """
+Dibujador de todos los elementos
+Autor:
+Entrada: posición x del mouse, posición y del mouse, click
+        """
         # Images
         power_img = pygame.image.load("Imgs\\power.png").convert_alpha()
         white_img = pygame.image.load("Imgs\\white.png").convert_alpha()
@@ -112,6 +126,11 @@ class SimulateMode:
         pygame.display.flip()
 
     def initialCall(self):
+        """
+Dibujador llamada inicial
+Autor:
+¡
+        """
 
         # Images
         on = True
@@ -215,6 +234,11 @@ class SimulateMode:
             pygame.display.flip()
 
     def showValues(self, element, type):
+        """
+Mostrar los valores de un elemento
+Autor:
+Entrada: elemento, tipo(potencia o resistencia)
+        """
         GREY = (200, 200, 200)
         if element.rotated:
             elementRect = pygame.Rect(element.rect.x, element.rect.y, element.rect.height, element.rect.width)
@@ -242,6 +266,10 @@ class SimulateMode:
         pass
 
     def setDijkstraAnchorPoints(self):
+        """
+Setter de los anchor points de los caminos de mayor tensión o menor tensión
+Autor:
+        """
         for line in self.list_lines_tuples:
             self.dijkstraAnchorPoints.append(line[0])
             self.dijkstraAnchorPoints.append(line[1])
@@ -250,6 +278,12 @@ class SimulateMode:
             self.dijkstraAnchorSquares.append(pygame.Rect((point[0] - 5, point[1] - 5, 10, 10)))
 
     def determineCurrentNode(self, point):
+        """
+Determinar el nodo en que se está
+Autor:
+Entrada: punto
+Salida: nodo
+        """
         for node in self.list_nodes:
             for anchorPoint in node.Points:
                 if point == anchorPoint:
@@ -266,6 +300,11 @@ class SimulateMode:
                             return self.determineCurrentNode(line[0])
 
     def drawShortestDijkstraLines(self, firstPoint, lastPoint):
+        """
+Dibujador de las  lineas del camino de menor tensión de djikstra
+Autor:
+Entrada: punto inicial, punto final
+        """
         if firstPoint == lastPoint:
             return True
         if self.pathCounter < len(self.listShortestPath):
@@ -307,6 +346,11 @@ class SimulateMode:
         return False
 
     def drawLongestDijkstraLines(self, firstPoint, lastPoint):
+        """
+Dibujador de las  lineas del camino de mayor tensión de djikstra
+Autor:
+Entrada: punto de inicio, punto final
+        """
         if firstPoint == lastPoint:
             return True
         if self.pathCounter < len(self.listLongestPath):
@@ -354,6 +398,11 @@ class SimulateMode:
     # Shell Sort de mayor a menor
 
     def shellsort(self, list):
+        """
+Algoritmo de ordenamiento de mayor a menor
+Autor: Marcelo Truque
+Entrada: Lista a ordenar
+        """
         n = len(list)
         partition = n // 2
         while partition > 0:
@@ -369,9 +418,19 @@ class SimulateMode:
     # QuickSort de menor a mayor
 
     def QuickSort(self, Lista):
+        """
+Algoritmo de ordenamiento de menor a mayor
+Autor: Marcelo Truque
+Entrada: Lista a ordenar
+        """
         self.QuickSortaux(Lista, 0, len(Lista) - 1)
 
     def QuickSortaux(self, Lista, Low, High):
+        """
+Función auxiliar del algoritmo de ordenamiento de menor a mayor
+Autor: Marcelo Truque
+Entrada: Lista a ordenar, índice más bajo en la lista, índice más alto en la lista
+        """
         if Low < High:
             index = self.Partition(Lista, Low, High)
 
@@ -379,6 +438,11 @@ class SimulateMode:
             self.QuickSortaux(Lista, index, High)
 
     def Partition(self, Lista, Low, High):
+        """
+Función que efectúa una partición en una lista
+Autor: Marcelo Truque
+Entrada: Lista a ordenar, índice más bajo en la lista, índice más alto en la lista
+        """
         index = Low - 1
         pivot = Lista[High]
         for i in range(Low, High):

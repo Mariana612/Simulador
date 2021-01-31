@@ -9,7 +9,16 @@ from random import *
 
 
 class DesignMode:
+    """
+Clase que modela el modo diseño
+Autor:
+    """
     def __init__(self, screen, clock, circuitList = None):
+        """
+Inicializador de la clase
+Autor:
+Entrada:Main window, main clock
+        """
         # Screen
         self.screen = screen
         self.screen.fill([243, 243, 243])
@@ -62,6 +71,12 @@ class DesignMode:
         self.designMenu()
 
     def tuple_list(self, listvar):
+        """
+Función que convierte una lista de variables en una lista de tuplas
+Autor:
+Entrada:Lista de variables
+Salida:Lista de tuplas
+        """
         tupledList = []
         for element in listvar:
             if isinstance(element, list):
@@ -73,6 +88,12 @@ class DesignMode:
 
 
     def paintButtons(self, touched1, touched2):  # Changes colors of buttons
+        """
+        Función para cambiar los colores de los botones
+        Autor:
+        Entrada:Lista de Nodos, booleano que indica si buscamos el mayor o menor peso
+        Salida:Nodo de Mayor/Menor distancia
+        """
         # Images
         res_img = pygame.image.load("Imgs\\resistencia.png").convert_alpha()
         res_img_on = pygame.image.load("Imgs\\resistenciaOn.png").convert_alpha()
@@ -100,6 +121,11 @@ class DesignMode:
         self.clock.tick(14)
 
     def createElement(self, width, height, power):  # Creates new element
+        """
+Función para crear un elemento en el modo diseño
+Autor:
+Entrada: Ancho del elemento, altura del elemento y booleano de si se crea una resistencia o fuente
+        """
         if power:  # Crea fuente de Poder
             element = PowerNode(350, 250, width, height)
             self.list_pow.append(element)
@@ -111,6 +137,11 @@ class DesignMode:
             self.changeValues(False)
 
     def changeValues(self, element):  # GUI thingy to change Name and Value
+        """
+Función que permite cambiar al usuario el nombre y valor de un componente añadido (GUI part)
+Autor:
+Entrada:elemento a cambiar
+        """
         # Images
         blue_ohms = pygame.image.load("Imgs\\blueRect_Ohm.png").convert_alpha()
         blue = pygame.image.load("Imgs\\blueRect.png").convert_alpha()
@@ -150,6 +181,11 @@ class DesignMode:
         pygame.display.flip()
 
     def changeValues2(self, element, pow):  # GUI thingy to change Name and Value
+        """
+Función que permite cambiar al usuario el nombre y valor de un componente añadido (actual change)
+Autor:
+Entrada:elementp a cambiar, booleano para saber si es una fuente o resistencia
+        """
         # Images
         blue_ohms = pygame.image.load("Imgs\\blueRect_Ohm.png").convert_alpha()
         blue = pygame.image.load("Imgs\\blueRect.png").convert_alpha()
@@ -195,6 +231,11 @@ class DesignMode:
         pygame.display.flip()
 
     def drawElements(self, mx, my, click):  # Refresh elements in screen
+        """
+Dibujador de todos los elementos
+Autor:
+Entrada: posición x del mouse, posición y del mouse, click
+        """
         # Images
         power_img = pygame.image.load("Imgs\\power.png").convert_alpha()
         white_img = pygame.image.load("Imgs\\white.png").convert_alpha()
@@ -266,6 +307,11 @@ class DesignMode:
         pygame.display.flip()
 
     def exportCircuit(self,filename):
+        """
+Función para exportar un circuito a un archivo txt
+Autor: Ignacio Vargas
+Entrada: Nombre del archivo
+        """
         import json, os
         powerList=[]
         resList=[]
@@ -279,11 +325,15 @@ class DesignMode:
 
         path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'circuits')) #agarra el path de circuits
         os.makedirs(path, exist_ok=True) #crea el directorio de circuits si no existe
-        with open(os.path.join(path,filename+'.txt'), 'w', encoding='utf-8') as f: #hay que acer el path.join para que cree un archivo y no un directorio
+        with open(os.path.join(path,filename+'.txt'), 'w', encoding='utf-8') as f: #hay que hacer el path.join para que cree un archivo y no un directorio
             json.dump(circuitList, f, ensure_ascii=False, indent=4)
 
 
     def exportMenu(self):
+        """
+Función que contiene el menú para exportar archivos
+Autor: Ignacio Vargas
+        """
         from pathvalidate import sanitize_filepath
         running = True
         filenameString = ""
@@ -342,6 +392,10 @@ class DesignMode:
         return
 
     def designMenu(self):  # Design Menu
+        """
+Función que contiene el menu de diseño
+Autor:
+        """
         # Flags
         on = True
         click = False
@@ -583,6 +637,11 @@ class DesignMode:
                 self.drawElements(mx, my, click)
 
     def checkCircuitValidity(self):
+        """
+Función que revisa la validez de un circuito insertado
+Autor:
+Salida: booleano de validación del circuito
+        """
         self.graph = Graph.Graph()
         if len(self.list_pow) > 1:
             return False
@@ -598,6 +657,11 @@ class DesignMode:
 
 
     def resolveNodes(self, firstAnchorPoint, lastAnchorPoint):
+        """
+FALTA ESTA, NO ME QUEDA MUY CLARO QUE HACE XFA LLENENLA
+Autor:
+Entrada:
+        """
         for line in self.list_lines_connections:
             if line[0] == firstAnchorPoint:
                 if line[1] == lastAnchorPoint:
@@ -756,6 +820,11 @@ class DesignMode:
                             break
 
     def checkNodeExistence(self, point):
+        """
+Función que revisa la existencia de un solo nodo
+Autor:
+Entrada:punto de un nodo
+        """
         for node in self.list_nodes:
             for nodePoint in node.Points:
                 if point == nodePoint:
@@ -764,6 +833,11 @@ class DesignMode:
         return False
 
     def checkTwoNodesExistance(self, point1, point2):
+        """
+Función que revisa la existencia de dos nodos
+Autor:
+Entrada:punto 1 y punto 2 de los nodos
+        """
         node1 = None
         node2 = None
         for node in self.list_nodes:
@@ -775,6 +849,10 @@ class DesignMode:
         return node1, node2
 
     def makeNodeConnections(self):
+        """
+Función que hace las conexiones entre nodos
+Autor:
+        """
         for resistance in self.list_res:
             node1 = None
             node2 = None

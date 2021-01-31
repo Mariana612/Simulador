@@ -1,18 +1,41 @@
 from Estructuras import Node
 
 class Graph:
+    """
+Clase del Grafo
+Autor: Marcelo Truque
+    """
     def __init__(self):
+        """
+Incicializador
+Autor: Marcelo Truque
+        """
         self._Nodes = []
 
     #Funciones útiles para el grupo
+
     def searchnode(self, Name):
+        """
+Función para buscar un nodo en base al nombre
+Autor: Marcelo Truque
+Parametros: String que contiene el nombre del nodo
+Salida:Nodo correspondiente al nombre insertado
+        """
         # Busqueda del nodo mediante el nombre
         for i in range(0, len(self._Nodes)):
             if self._Nodes[i].name == Name:
                 return self._Nodes[i]
             else:
                 continue
+
+
     def addnode(self, name, value):
+        """
+Función para añadir un nodo al grafo
+Autor: Marcelo Truque
+Entrada: Nombre del nuevo nodo y valor de voltaje/resistencia
+Salida: Nodo nuevo
+        """
         # Creación del nodo
         NewNode = Node.Node(name,value)
         # Adición a la lista de nodos
@@ -20,6 +43,11 @@ class Graph:
         return NewNode
 
     def fusenodes(self,Name1,Name2):
+        """
+Función fusionar dos nodos y sus propiedades
+Autor: Marcelo Truque
+Entrada: Nombre de los dos nodos a fusionar
+        """
         Node1=self.searchnode(Name1)
         Node2=self.searchnode(Name2)
         Node1.Points+=Node2.Points
@@ -42,6 +70,11 @@ class Graph:
 
 
     def makeconection(self, Name1, Name2, peso):
+        """
+Función para hacer una conexión entre dos nodos y asignarle un peso
+Autor: Marcelo Truque
+Entrada: Nombre de los dos nodos a conectar y el peso correspondiente
+        """
         # Registrar conexión en el primer nodo
         self.searchnode(Name1).addconnection(self.searchnode(Name2),peso)
         # Registrar conexión en el segundo nodo
@@ -55,12 +88,24 @@ class Graph:
 
 
     def searchshortestpath(self, Name1, Name2):
+        """
+Función para buscar el camino más corto entre dos nodos
+Autor: Marcelo Truque
+Entrada: Nombre del nodo fuente y el nodo destino para el camino más corto
+Salida: Path más corto entre los nodos insertados
+        """
         self.resetDijkstra(self._Nodes,True)
         Node1 = self.searchnode(Name1)
         Node2 = self.searchnode(Name2)
         self.Dijkstra(Node1,True)
         return Node2.path
     def searchlongestpath(self,Name1,Name2):
+        """
+Función para buscar el camino más largo entre dos nodos
+Autor: Marcelo Truque
+Entrada: Nombre del nodo fuente y el nodo destino para el camino más largo
+Salida: Path más largo entre los nodos insertados
+        """
         self.resetDijkstra(self._Nodes,False)
         Node1 = self.searchnode(Name1)
         Node2 = self.searchnode(Name2)
@@ -71,6 +116,11 @@ class Graph:
         #Funciones para corto
 
     def Dijkstra(self,Node1,Short):
+        """
+Función que contiene el algoritmo de Dijkstra con una variante para el camino más largo
+Autor: Marcelo Truque
+Entrada: Nodo fuente y booleano sobre camino más corto o largo
+        """
         Node1.Distance=0
         VisitedNodes=[]
         UnvisitedNodes=[Node1]
@@ -96,6 +146,11 @@ class Graph:
             VisitedNodes.append(currentNode)
 
     def MinMaxDistance(self,evaluationNode,weight,sourceNode,Short):
+        """
+Función para evaluar si el camino recorrido desde un source es viable o no
+Autor: Marcelo Truque
+Entrada: Nodo puesto en evaluación, peso entre nodos, nodo fuente
+        """
         SourceDistance=sourceNode.Distance
         if Short:
             if (SourceDistance+weight<evaluationNode.Distance):
@@ -112,6 +167,12 @@ class Graph:
                 Shortestpath.append((sourceNode,weight))
                 evaluationNode.path=Shortestpath
     def LowBigDistance(self,NodeList,Short):
+        """
+Función para buscar en una lista el nodo de mayor o menor peso a conveniencia
+Autor: Marcelo Truque
+Entrada:Lista de Nodos, booleano que indica si buscamos el mayor o menor peso
+Salida:Nodo de Mayor/Menor distancia
+        """
         if Short:
             LowestDistanceNode=None
             lowestdistance=float("inf")
@@ -132,6 +193,11 @@ class Graph:
             return BigestDistanceNode
 
     def resetDijkstra(self,Lista,Short):
+        """
+Función para resetear los valores de distancia y path en todo el grafo a conveniencia
+Autor: Marcelo Truque
+Entrada: Lista, booleano si se debe modificar al menos inf o al inf
+        """
         for i in Lista:
             if Short:
                 i.Distance=float("inf")
@@ -145,6 +211,11 @@ class Graph:
     # Shell Sort de mayor a menor
 
     def shellsort(self, list):
+        """
+Función que ordena una lista de manera descendente mediante inserciones a largas distancias
+Autor: Marcelo Truque
+Entrada: Lista a ordenar
+        """
         n = len(list)
         partition = n // 2
         while partition > 0:
@@ -160,9 +231,19 @@ class Graph:
     # QuickSort de menor a mayor
 
     def quicksort(self, Lista):
+        """
+Función para ordenar una lista de manera ascendente mediante particiones
+Autor: Marcelo Truque
+Entrada: Lista a ordenar
+        """
         self.QuickSortaux(Lista, 0, len(Lista) - 1)
 
     def QuickSortaux(self, Lista, Low, High):
+        """
+Función auxiliar para la función de ordenamiento
+Autor: Marcelo Truque
+Entrada: Lista a ordenar, índice más bajo de la lista de entrada, índice más alto de la lista de entrada
+        """
         if Low < High:
             index = self.Partition(Lista, Low, High)
 
@@ -170,6 +251,12 @@ class Graph:
             self.QuickSortaux(Lista, index, High)
 
     def Partition(self, Lista, Low, High):
+        """
+Función para efectuar la partición en una lista a coveniencia
+Autor: Marcelo Truque
+Entrada: Lista a ordenar, índice más bajo de la lista de entrada, índice más alto de la lista de entrada
+        """
+
         index = Low - 1
         pivot = Lista[High]
         for i in range(Low, High):
@@ -178,6 +265,7 @@ class Graph:
                 Lista[index], Lista[i] = Lista[i], Lista[index]
         Lista[index + 1], Lista[High] = Lista[High], Lista[index + 1]
         return i + 1
+
 
 
 
