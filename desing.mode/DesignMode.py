@@ -72,8 +72,8 @@ Entrada:Main window, main clock
 
     def tuple_list(self, listvar):
         """
-Función que convierte una lista de variables en una lista de tuplas
-Autor:
+Función que convierte una lista de listas en una lista de tuplas recursivamente
+Autor: Ignacio Vargas
 Entrada:Lista de variables
 Salida:Lista de tuplas
         """

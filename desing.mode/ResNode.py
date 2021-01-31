@@ -67,8 +67,8 @@ Autor:
 
     def toDict(self):
         """
-Función getter de toda la info de la clase
-Autor:
+Función: Pasa los atributos del objeto a un diccionario para formato JSON
+Autor: Ignacio Vargas
 Salida: Diccionario con el nombre de la variable y su valor
         """
         return {"x": self.rect.x, "y": self.rect.y, "width": self.rect.width, "height": self.rect.height, "name": self.name, "value": self.value, "rotated": self.rotated}

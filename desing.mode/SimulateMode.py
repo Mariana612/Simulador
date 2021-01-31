@@ -126,8 +126,7 @@ class SimulateMode:
     def initialCall(self):
         """
         Dibujador llamada inicial
-        Autor:
-        ¡
+        Autor: Mariana Navarro
         """
 
         # Images
@@ -234,7 +233,7 @@ class SimulateMode:
     def showValues(self, element, type):
         """
         Mostrar los valores de un elemento
-        Autor:
+        Autor: Ignacio Vargas
         Entrada: elemento, tipo(potencia o resistencia)
         """
         GREY = (200, 200, 200)
