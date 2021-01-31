@@ -581,11 +581,6 @@ class DesignMode:
         firstAnchorPoint = voltageSource.anchorPoints[0].center
         lastAnchorPoint = voltageSource.anchorPoints[1].center
         self.resolveNodes(firstAnchorPoint, lastAnchorPoint)
-        for i in self.list_nodes:
-            print(i.name)
-            print(i.Points)
-            print("--------------")
-        print("DONE")
         if self.validCircuit:
             self.makeNodeConnections()
         else:
@@ -595,18 +590,10 @@ class DesignMode:
 
     def resolveNodes(self, firstAnchorPoint, lastAnchorPoint):
         for line in self.list_lines_connections:
-            print("searching for line...")
-            print(firstAnchorPoint, line[0])
-            print(firstAnchorPoint, line[1])
             if line[0] == firstAnchorPoint:
-                print("FOUND MATCHING POINT IN LINE[0]")
                 if line[1] == lastAnchorPoint:
-                    print("SECOND POINT IS LAST POINT")
                     if self.checkNodeExistence(line[0]):
-                        print("FIRST POINT IS ALREADY IN A NODE")
                         if self.checkNodeExistence(line[1]):
-                            print("SECOND POINT IS ALREADY IN A NODE")
-                            print("ignoring line...")
                             continue
                         else:
                             self.lastLookedAtNode.Points.append(line[1])
@@ -614,13 +601,9 @@ class DesignMode:
                             self.resolveNodes(line[1], lastAnchorPoint)
                             continue
                     elif self.checkNodeExistence(line[1]):
-                        print("SECOND POINT IS NOT IN A NODE")
-                        print("adding point to node...")
                         self.lastLookedAtNode.Points.append(line[0])
                         continue
                     else:
-                        print("NONE OF THE POINTS ARE NOT IN ANY NODE")
-                        print("creating new node...")
                         node = self.graph.addnode("node"+str(self.nodeNameCounter), 0)
                         self.nodeNameCounter += 1
                         node.Points.append(line[0])
@@ -630,41 +613,25 @@ class DesignMode:
                         self.resolveNodes(line[1], lastAnchorPoint)
                         continue
                 for res in self.list_res:
-                    print("SECOND POINT IS NOT LAST POINT")
-                    print("searching resistances...")
-                    print(line[1], res.anchorPoints[0].center)
-                    print(line[1], res.anchorPoints[1].center)
                     if res.anchorPoints[0].center == line[1]:
-                        print("FOUND MATCHING POINT IN res.anchorPoints[0]")
                         if self.checkNodeExistence(line[0]):
-                            print("FIRST POINT IS ALREADY IN A NODE")
                             if self.checkNodeExistence(line[1]):
-                                print("SECOND POINT IS ALREADY IN A NODE")
                                 node0, node1 = self.checkTwoNodesExistance(line[0], line[1])
                                 if node0 == node1:
-                                    print("ignoring line...")
                                     break
                                 else:
-                                    print("fusing nodes...")
                                     self.graph.fusenodes(node0.name, node1.name)
                                     self.list_nodes.remove(node1)
                                     break
                             else:
-                                print("SECOND POINT IS NOT IN A NODE")
-                                print("adding point to node...")
                                 self.lastLookedAtNode.Points.append(line[1])
                                 self.resolveNodes(res.anchorPoints[1].center, lastAnchorPoint)
                                 self.resolveNodes(line[1], lastAnchorPoint)
                                 break
                         elif self.checkNodeExistence(line[1]):
-                            print("FIRST POINT IS NOT IN A NODE")
-                            print("SECOND POINT IS ALREADY IN A NODE")
-                            print("adding point to node...")
                             self.lastLookedAtNode.Points.append(line[0])
                             break
                         else:
-                            print("NONE OF THE POINTS ARE NOT IN ANY NODE")
-                            print("creating new node...")
                             node = self.graph.addnode("node" + str(self.nodeNameCounter), 0)
                             self.nodeNameCounter += 1
                             node.Points.append(line[0])
@@ -674,36 +641,24 @@ class DesignMode:
                             self.resolveNodes(line[1], lastAnchorPoint)
                             break
                     elif res.anchorPoints[1].center == line[1]:
-                        print("FOUND MATCHING POINT IN res.anchorPoints[1]")
                         if self.checkNodeExistence(line[0]):
-                            print("FIRST POINT IS ALREADY IN A NODE")
                             if self.checkNodeExistence(line[1]):
-                                print("SECOND POINT IS ALREADY IN A NODE")
                                 node0, node1 = self.checkTwoNodesExistance(line[0], line[1])
                                 if node0 == node1:
-                                    print("ignoring line...")
                                     break
                                 else:
-                                    print("fusing nodes...")
                                     self.graph.fusenodes(node0.name, node1.name)
                                     self.list_nodes.remove(node1)
                                     break
                             else:
-                                print("SECOND POINT IS NOT IN A NODE")
-                                print("adding point to node...")
                                 self.lastLookedAtNode.Points.append(line[1])
                                 self.resolveNodes(res.anchorPoints[0].center, lastAnchorPoint)
                                 self.resolveNodes(line[1], lastAnchorPoint)
                                 break
                         elif self.checkNodeExistence(line[1]):
-                            print("FIRST POINT IS NOT IN A NODE")
-                            print("SECOND POINT IS ALREADY IN A NODE")
-                            print("adding point to node...")
                             self.lastLookedAtNode.Points.append(line[0])
                             break
                         else:
-                            print("NONE OF THE POINTS ARE IN ANY NODE")
-                            print("creating new node...")
                             node = self.graph.addnode("node" + str(self.nodeNameCounter), 0)
                             self.nodeNameCounter += 1
                             node.Points.append(line[0])
@@ -714,7 +669,6 @@ class DesignMode:
                             break
 
             elif line[1] == firstAnchorPoint:
-                print("FOUND MATCHING POINT IN LINE[1]")
                 if line[0] == lastAnchorPoint:
                     if self.checkNodeExistence(line[1]):
                         if self.checkNodeExistence(line[0]):
@@ -796,10 +750,8 @@ class DesignMode:
         for node in self.list_nodes:
             for nodePoint in node.Points:
                 if point == nodePoint:
-                    print("NODE FOUND")
                     self.lastLookedAtNode = node
                     return True
-        print("NODE NOT FOUND")
         return False
 
     def checkTwoNodesExistance(self, point1, point2):

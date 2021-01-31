@@ -85,6 +85,13 @@ class SimulateMode:
             yp2 = p2[1]
             pygame.draw.aaline(self.screen, (255, 0, 0), (xp1+2, yp1-2), (xp2+2, yp2-2))
 
+        if self.pointA is not None:
+            pygame.draw.circle(self.screen, (255, 0, 0), self.pointA, 5)
+
+        if self.pointB is not None:
+            pygame.draw.circle(self.screen, (255, 0, 0), self.pointB, 5)
+
+
         if self.flagShowResistancesList:
             pygame.draw.rect(self.screen, (255, 230, 176), (50, 50, 350, 350))
             pygame.draw.rect(self.screen, (0, 0, 0), (50, 50, 350, 350), 1)
@@ -163,7 +170,14 @@ class SimulateMode:
             for i in self.dijkstraAnchorSquares:
                 if i.collidepoint((mx, my)) and click and not firstClick:
                     firstClick = True
-                    if self.pointA is None:
+                    if (self.pointA is not None) and (self.pointB is not None):
+                        self.pointA = i.center
+                        self.pointB = None
+                        self.list_least_voltage_lines = []
+                        self.list_most_voltage_lines = []
+                        self.list_traveled_lines = []
+                        self.pathCounter = 0
+                    elif self.pointA is None:
                         self.pointA = i.center
                     elif self.pointB is None:
                         self.pointB = i.center
@@ -177,8 +191,7 @@ class SimulateMode:
                         self.pathCounter = 0
                         self.list_traveled_lines = []
                         self.drawLongestDijkstraLines(self.pointA, self.pointB)
-                    else:
-                        break
+
 
             if not self.flagShowResistancesList:
                 for res in self.list_res:
@@ -197,6 +210,7 @@ class SimulateMode:
                     else:
                         if pow.rect.collidepoint((mx, my)):
                             self.showValues(pow, "Power")
+
 
             pygame.display.flip()
 
@@ -239,7 +253,6 @@ class SimulateMode:
         for node in self.list_nodes:
             for anchorPoint in node.Points:
                 if point == anchorPoint:
-                    print(node.name)
                     return node
                 else:
                     for line in self.list_lines_tuples:
@@ -253,62 +266,40 @@ class SimulateMode:
                             return self.determineCurrentNode(line[0])
 
     def drawShortestDijkstraLines(self, firstPoint, lastPoint):
-        print(firstPoint, lastPoint)
         if firstPoint == lastPoint:
-            print("FOUND LAST POINT")
             return True
         if self.pathCounter < len(self.listShortestPath):
             for resistance in self.list_res:
-                print("searching resistances points...")
                 if resistance.anchorPoints[0].center == firstPoint:
-                    print("FOUND MATCHING RESISTANCE ANCHORPOINT[0]")
-                    print(resistance.voltage, self.listShortestPath[self.pathCounter][1])
                     if resistance.voltage == self.listShortestPath[self.pathCounter][1]:
                         self.pathCounter += 1
-                        print("entering recursion...")
+
                         if not self.drawShortestDijkstraLines(resistance.anchorPoints[1].center, lastPoint):
-                            print("THIS SHOULD NOT HAPPEN!!!!!!!!")
                             self.pathCounter -= 1
                             return False
                         else:
                             return True
                 elif resistance.anchorPoints[1].center == firstPoint:
-                    print("FOUND MATCHING RESISTANCE ANCHORPOINT[1]")
-                    print(resistance.voltage, self.listShortestPath[self.pathCounter][1])
                     if resistance.voltage == self.listShortestPath[self.pathCounter][1]:
-                        print("RESISTANCE HAS RIGHT WEIGHT")
                         self.pathCounter += 1
-                        print("entering recursion...")
                         if not self.drawShortestDijkstraLines(resistance.anchorPoints[0].center, lastPoint):
-                            print("THIS SHOULD NOT HAPPEN!!!!!!!!")
                             self.pathCounter -= 1
                             return False
                         else:
                             return True
-
         for line in self.list_lines_tuples:
-            print("searching matching point in lines...")
-            print(firstPoint, line[0])
-            print(firstPoint, line[1])
             if line in self.list_traveled_lines:
-                print("ALREADY TRAVELED LINE")
                 continue
-
             if line[0] == firstPoint:
-                print("FOUND MATCHING POINT IN LINE[0]")
                 self.list_traveled_lines.append(line)
                 self.list_least_voltage_lines.append(line)
-                print("entering recursion...")
                 if not self.drawShortestDijkstraLines(line[1], lastPoint):
                     self.list_least_voltage_lines.remove(line)
                 else:
                     return True
-
             elif line[1] == firstPoint:
-                print("FOUND MATCHING POINT IN LINE[1]")
                 self.list_traveled_lines.append(line)
                 self.list_least_voltage_lines.append(line)
-                print("entering recursion...")
                 if not self.drawShortestDijkstraLines(line[0], lastPoint):
                     self.list_least_voltage_lines.remove(line)
                 else:
@@ -316,62 +307,43 @@ class SimulateMode:
         return False
 
     def drawLongestDijkstraLines(self, firstPoint, lastPoint):
-        print(firstPoint, lastPoint)
         if firstPoint == lastPoint:
-            print("FOUND LAST POINT")
             return True
         if self.pathCounter < len(self.listLongestPath):
             for resistance in self.list_res:
-                print("searching resistances points...")
                 if resistance.anchorPoints[0].center == firstPoint:
-                    print("FOUND MATCHING RESISTANCE ANCHORPOINT[0]")
-                    print(resistance.voltage, self.listLongestPath[self.pathCounter][1])
                     if resistance.voltage == self.listLongestPath[self.pathCounter][1]:
                         self.pathCounter += 1
-                        print("entering recursion...")
                         if not self.drawLongestDijkstraLines(resistance.anchorPoints[1].center, lastPoint):
-                            print("THIS SHOULD NOT HAPPEN!!!!!!!!")
                             self.pathCounter -= 1
                             return False
                         else:
                             return True
                 elif resistance.anchorPoints[1].center == firstPoint:
-                    print("FOUND MATCHING RESISTANCE ANCHORPOINT[1]")
                     print(resistance.voltage, self.listLongestPath[self.pathCounter][1])
                     if resistance.voltage == self.listLongestPath[self.pathCounter][1]:
-                        print("RESISTANCE HAS RIGHT WEIGHT")
                         self.pathCounter += 1
-                        print("entering recursion...")
                         if not self.drawLongestDijkstraLines(resistance.anchorPoints[0].center, lastPoint):
-                            print("THIS SHOULD NOT HAPPEN!!!!!!!!")
                             self.pathCounter -= 1
                             return False
                         else:
                             return True
 
         for line in self.list_lines_tuples:
-            print("searching matching point in lines...")
             print(firstPoint, line[0])
             print(firstPoint, line[1])
             if line in self.list_traveled_lines:
-                print("ALREADY TRAVELED LINE")
                 continue
-
             if line[0] == firstPoint:
-                print("FOUND MATCHING POINT IN LINE[0]")
                 self.list_traveled_lines.append(line)
                 self.list_most_voltage_lines.append(line)
-                print("entering recursion...")
                 if not self.drawLongestDijkstraLines(line[1], lastPoint):
                     self.list_most_voltage_lines.remove(line)
                 else:
                     return True
-
             elif line[1] == firstPoint:
-                print("FOUND MATCHING POINT IN LINE[1]")
                 self.list_traveled_lines.append(line)
                 self.list_most_voltage_lines.append(line)
-                print("entering recursion...")
                 if not self.drawLongestDijkstraLines(line[0], lastPoint):
                     self.list_most_voltage_lines.remove(line)
                 else:
