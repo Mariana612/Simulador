@@ -132,6 +132,46 @@ class Graph:
                 i.Distance=-float("inf")
                 i.path=[]
 
+    # Ordenamiento de Datos
+
+    # Shell Sort de mayor a menor
+
+    def shellsort(self, list):
+        n = len(list)
+        partition = n // 2
+        while partition > 0:
+            for i in range(partition, n):
+                temporal = list[i]
+                j = i
+                while j >= partition and list[j - partition] < temporal:
+                    list[j] = list[j - partition]
+                    j -= partition
+                list[j] = temporal
+            partition //= 2
+
+    # QuickSort de menor a mayor
+
+    def quicksort(self, Lista):
+        self.QuickSortaux(Lista, 0, len(Lista) - 1)
+
+    def QuickSortaux(self, Lista, Low, High):
+        if Low < High:
+            index = self.Partition(Lista, Low, High)
+
+            self.QuickSortaux(Lista, Low, index - 1)
+            self.QuickSortaux(Lista, index, High)
+
+    def Partition(self, Lista, Low, High):
+        index = Low - 1
+        pivot = Lista[High]
+        for i in range(Low, High):
+            if Lista[i] < pivot:
+                index = index + 1
+                Lista[index], Lista[i] = Lista[i], Lista[index]
+        Lista[index + 1], Lista[High] = Lista[High], Lista[index + 1]
+        return i + 1
+
+
 Grafo=Graph()
 
 Grafo.addnode("A",32)

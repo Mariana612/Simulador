@@ -462,7 +462,8 @@ class DesignMode:
                     self.paintButtons(False, False)
 
                 if delete_button.collidepoint((mx, my)) and click:
-                    self.remove = True
+                    self.list_lines_tuples = []
+                    self.list_lines_connections = []
 
                 if delete_thingy_button.collidepoint((mx, my)) and click:
                     self.remove_thingy = True
@@ -470,13 +471,6 @@ class DesignMode:
                 if export_button.collidepoint((mx,my)) and click:
                     self.exportMenu()
                     click = False
-
-                if self.remove:
-                    for elements in self.list_lines_tuples:
-                        self.list_lines_tuples.remove(elements)
-                    for elements in self.list_lines_connections:
-                        self.list_lines_connections.remove(elements)
-                    self.remove = False
 
                 if self.remove_thingy:
                     for elements in self.list_pow:
