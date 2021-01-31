@@ -180,16 +180,4 @@ class Graph:
         return i + 1
 
 
-Grafo=Graph()
 
-Grafo.addnode("A",32)
-Grafo.addnode("B",65)
-Grafo.addnode("C",90)
-
-Grafo.makeconection("A","B",7.37)
-Grafo.makeconection("A","C",2.52)
-Grafo.makeconection("B","C",5.99)
-
-
-Grafo.searchlongestpath("A","C")
-print("Fin")
