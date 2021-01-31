@@ -194,7 +194,7 @@ Salida:Nodo de Mayor/Menor distancia
 
     def resetDijkstra(self,Lista,Short):
         """
-Función para resetear los valores de distancia y path en todo el grafo a conveniencia
+Función para resetear los valores de distancia y path en el grafo a conveniencia
 Autor: Marcelo Truque
 Entrada: Lista, booleano si se debe modificar al menos inf o al inf
         """
