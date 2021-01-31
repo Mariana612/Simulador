@@ -5,13 +5,13 @@ import sys
 
 class SimulateMode:
     """
-Clase del modo simular
-Autor:
+    Clase del modo simular
+    Autor: Mariana Navarro
     """
     def __init__(self, screen, clock, list_pow, list_res, list_lines_tuples, graph, list_lines_connections, list_nodes):
         """
         Inicializador de la clase
-        Autor:
+        Autor: Mariana Navarro
         Entrada:Main window, main clock,Lista fuentes, Lista resistencias, Tupla lineas, grafo, lista conexiones lineas, lista nodos
         """
         self.screen = screen
@@ -48,9 +48,9 @@ Autor:
 
     def drawElements(self, mx, my, click):  # Refresh elements in screen
         """
-Dibujador de todos los elementos
-Autor:
-Entrada: posición x del mouse, posición y del mouse, click
+        Dibujador de todos los elementos
+        Autor: Mariana Navarro
+        Entrada: posición x del mouse, posición y del mouse, click
         """
         # Images
         power_img = pygame.image.load("Imgs\\power.png").convert_alpha()
@@ -127,9 +127,9 @@ Entrada: posición x del mouse, posición y del mouse, click
 
     def initialCall(self):
         """
-Dibujador llamada inicial
-Autor:
-¡
+        Dibujador llamada inicial
+        Autor:
+        ¡
         """
 
         # Images
@@ -235,9 +235,9 @@ Autor:
 
     def showValues(self, element, type):
         """
-Mostrar los valores de un elemento
-Autor:
-Entrada: elemento, tipo(potencia o resistencia)
+        Mostrar los valores de un elemento
+        Autor:
+        Entrada: elemento, tipo(potencia o resistencia)
         """
         GREY = (200, 200, 200)
         if element.rotated:
@@ -267,8 +267,9 @@ Entrada: elemento, tipo(potencia o resistencia)
 
     def setDijkstraAnchorPoints(self):
         """
-Setter de los anchor points de los caminos de mayor tensión o menor tensión
-Autor:
+        Setter de todos los puntos en los que se pueden asignar los puntos para encontrar los caminos de mayor y
+        menor tensión
+        Autor: Jose Retana
         """
         for line in self.list_lines_tuples:
             self.dijkstraAnchorPoints.append(line[0])
@@ -279,10 +280,10 @@ Autor:
 
     def determineCurrentNode(self, point):
         """
-Determinar el nodo en que se está
-Autor:
-Entrada: punto
-Salida: nodo
+        Determinar el nodo en que se encuentre un punto cualquiera
+        Autor: Jose Retana
+        Entrada: point (Tuple)
+        Salida: Node
         """
         for node in self.list_nodes:
             for anchorPoint in node.Points:
@@ -301,9 +302,11 @@ Salida: nodo
 
     def drawShortestDijkstraLines(self, firstPoint, lastPoint):
         """
-Dibujador de las  lineas del camino de menor tensión de djikstra
-Autor:
-Entrada: punto inicial, punto final
+        Función recursiva que asigna las lineas a dibujar para mostrar el camino de
+        menor caida de tensión por djikstra
+
+        Autor: Jose Retana
+        Entrada: firstPoint (Tuple), lastPoint(Tuple)
         """
         if firstPoint == lastPoint:
             return True
@@ -347,10 +350,17 @@ Entrada: punto inicial, punto final
 
     def drawLongestDijkstraLines(self, firstPoint, lastPoint):
         """
-Dibujador de las  lineas del camino de mayor tensión de djikstra
-Autor:
-Entrada: punto de inicio, punto final
+        Función recursiva que asigna las lineas a dibujar para mostrar el camino de
+        mayor caida de tensión por djikstra
+
+        **Nota**
+        No siempre encuentra el camino de mayor tensión debido a las limitaciones del
+        algoritmo de dijkstra.
+
+        Autor: Jose Retana
+        Entrada: firstPoint (Tuple), lastPoint(Tuple)
         """
+
         if firstPoint == lastPoint:
             return True
         if self.pathCounter < len(self.listLongestPath):
@@ -393,15 +403,16 @@ Entrada: punto de inicio, punto final
                 else:
                     return True
         return False
+
     # Ordenamiento de Datos
 
     # Shell Sort de mayor a menor
 
     def shellsort(self, list):
         """
-Algoritmo de ordenamiento de mayor a menor
-Autor: Marcelo Truque
-Entrada: Lista a ordenar
+        Algoritmo de ordenamiento de mayor a menor
+        Autor: Marcelo Truque
+        Entrada: Lista a ordenar
         """
         n = len(list)
         partition = n // 2
@@ -419,17 +430,17 @@ Entrada: Lista a ordenar
 
     def QuickSort(self, Lista):
         """
-Algoritmo de ordenamiento de menor a mayor
-Autor: Marcelo Truque
-Entrada: Lista a ordenar
+        Algoritmo de ordenamiento de menor a mayor
+        Autor: Marcelo Truque
+        Entrada: Lista a ordenar
         """
         self.QuickSortaux(Lista, 0, len(Lista) - 1)
 
     def QuickSortaux(self, Lista, Low, High):
         """
-Función auxiliar del algoritmo de ordenamiento de menor a mayor
-Autor: Marcelo Truque
-Entrada: Lista a ordenar, índice más bajo en la lista, índice más alto en la lista
+        Función auxiliar del algoritmo de ordenamiento de menor a mayor
+        Autor: Marcelo Truque
+        Entrada: Lista a ordenar, índice más bajo en la lista, índice más alto en la lista
         """
         if Low < High:
             index = self.Partition(Lista, Low, High)
@@ -439,9 +450,9 @@ Entrada: Lista a ordenar, índice más bajo en la lista, índice más alto en la
 
     def Partition(self, Lista, Low, High):
         """
-Función que efectúa una partición en una lista
-Autor: Marcelo Truque
-Entrada: Lista a ordenar, índice más bajo en la lista, índice más alto en la lista
+        Función que efectúa una partición en una lista
+        Autor: Marcelo Truque
+        Entrada: Lista a ordenar, índice más bajo en la lista, índice más alto en la lista
         """
         index = Low - 1
         pivot = Lista[High]

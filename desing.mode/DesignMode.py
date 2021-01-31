@@ -638,13 +638,15 @@ Autor:
 
     def checkCircuitValidity(self):
         """
-Función que revisa la validez de un circuito insertado
-Autor:
-Salida: booleano de validación del circuito
+        Función que revisa si un circuito dibujado es válido.
+        Si lo es, crea el nodo y sus conexiones.
+        Autor: Jose Retana
+        Salida: booleano de validación del circuito
         """
         self.graph = Graph.Graph()
         if len(self.list_pow) > 1:
-            return False
+            self.validCircuit = False
+            return
         voltageSource = self.list_pow[0]
         firstAnchorPoint = voltageSource.anchorPoints[0].center
         lastAnchorPoint = voltageSource.anchorPoints[1].center
@@ -658,9 +660,11 @@ Salida: booleano de validación del circuito
 
     def resolveNodes(self, firstAnchorPoint, lastAnchorPoint):
         """
-FALTA ESTA, NO ME QUEDA MUY CLARO QUE HACE XFA LLENENLA
-Autor:
-Entrada:
+        Función recursiva que analiza el circuito dado y determina si es válido o no.
+        Si es válido, crea los nodos correspondientes en el grafo, junto con los puntos claves
+        necesarios para crear las conexiones.
+        Autor: Jose Retana
+        Entrada: firstAnchorPoint, lastAnchorPoint (Tuples)
         """
         for line in self.list_lines_connections:
             if line[0] == firstAnchorPoint:
@@ -821,9 +825,10 @@ Entrada:
 
     def checkNodeExistence(self, point):
         """
-Función que revisa la existencia de un solo nodo
-Autor:
-Entrada:punto de un nodo
+        Función que revisa si un punto ya existe entre los nodos existentes
+        Autor: Jose Retana
+        Entrada: punto de un nodo
+        Salida: Bool
         """
         for node in self.list_nodes:
             for nodePoint in node.Points:
@@ -834,9 +839,10 @@ Entrada:punto de un nodo
 
     def checkTwoNodesExistance(self, point1, point2):
         """
-Función que revisa la existencia de dos nodos
-Autor:
-Entrada:punto 1 y punto 2 de los nodos
+        Retorna los nodos a los que pertenecen los dos puntos dados
+        Autor: Jose Retana
+        Entrada: point1, point2 (Tuple)
+        Salida: node1, node2 (Node)
         """
         node1 = None
         node2 = None
@@ -850,8 +856,9 @@ Entrada:punto 1 y punto 2 de los nodos
 
     def makeNodeConnections(self):
         """
-Función que hace las conexiones entre nodos
-Autor:
+        Crea las conexiones entre nodos y asigna los valores de voltaje y
+        corriente de cada uno
+        Autor: Jose Retana
         """
         for resistance in self.list_res:
             node1 = None
