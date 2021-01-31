@@ -27,7 +27,7 @@ Entrada:Nodos a desconectar
         Node2.Conections.pop(Node1.name)
 
     def addconnection(self, Node, Peso):
-    """
+        """
 Función Añadir una conexión entre dos nodos
 Autor: Marcelo Truque
 Entrada:Nodo a conectar y el peso a asignar a la conexión

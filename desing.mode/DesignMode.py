@@ -10,8 +10,8 @@ from random import *
 
 class DesignMode:
     """
-Clase que modela el modo diseño
-Autor:
+    Clase que modela el modo diseño
+    Autor:
     """
     def __init__(self, screen, clock, circuitList = None):
         """
