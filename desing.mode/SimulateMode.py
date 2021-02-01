@@ -198,15 +198,17 @@ class SimulateMode:
                     elif self.pointB is None:
                         self.pointB = i.center
                         NodeA = self.determineCurrentNode(self.pointA)
+                        self.list_traveled_lines = []
                         NodeB = self.determineCurrentNode(self.pointB)
-                        self.listShortestPath = self.graph.searchshortestpath(NodeA.name, NodeB.name)
-                        self.listLongestPath = self.graph.searchlongestpath(NodeA.name, NodeB.name)
-                        self.pathCounter = 0
-                        self.list_traveled_lines = []
-                        self.drawShortestDijkstraLines(self.pointA, self.pointB)
-                        self.pathCounter = 0
-                        self.list_traveled_lines = []
-                        self.drawLongestDijkstraLines(self.pointA, self.pointB)
+                        if not (NodeA.name == NodeB.name):
+                            self.listShortestPath = self.graph.searchshortestpath(NodeA.name, NodeB.name)
+                            self.listLongestPath = self.graph.searchlongestpath(NodeA.name, NodeB.name)
+                            self.pathCounter = 0
+                            self.list_traveled_lines = []
+                            self.drawShortestDijkstraLines(self.pointA, self.pointB)
+                            self.pathCounter = 0
+                            self.list_traveled_lines = []
+                            self.drawLongestDijkstraLines(self.pointA, self.pointB)
 
 
             if not self.flagShowResistancesList:
